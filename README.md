@@ -40,3 +40,79 @@ The IOUserClient api
 * destroy (selector 1)
 * send (selector 2)
 * list (selector 3)
+
+create
+------
+
+takes 4 input arguments (name pointer, name length, reportdescriptor pointer, reportdescriptor length) and 1 output argument (64bit integer set to 0 on success).
+
+It creates a new fake/virtual HID device with the specified reportdescriptor
+
+destroy
+-------
+
+takes 2 input arguments (name pointer, name length) and 1 output argument (64bit integer set to 0 on success).
+
+It cancels a previously created fake/virtual HID device
+
+send
+----
+
+takes 4 input arguments (name pointer, name length, msg pointer, msg length) and 1 output argument (64bit integer set to 0 on success).
+
+It generates a HID event from a previously created fake/virtual HID device
+
+list
+----
+
+takes 2 input arguments (buffer pointer, buffer length) and 2 output arguments (needed bytes and returned items)
+
+It returns (into the supplied buffer pointer) the list of available fake/virtual devices separated by \0. The items output value contains the number of returned items. If the supplied buffer is not big enough, the needed bytes value contains a suggestion for a second run
+
+An example report descriptor
+============================
+
+Building report descriptors is a really annoying task.
+
+To simplify testing, the following one is a generic mouse (thanks http://eleccelerator.com/tutorial-about-usb-hid-report-descriptors/)
+
+```c
+unsigned char report_descriptor[] = {
+0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
+0x09, 0x02,                    // USAGE (Mouse)
+0xa1, 0x01,                    // COLLECTION (Application)
+0x09, 0x01,                    //   USAGE (Pointer)
+0xa1, 0x00,                    //   COLLECTION (Physical)
+0x05, 0x09,                    //     USAGE_PAGE (Button)
+0x19, 0x01,                    //     USAGE_MINIMUM (Button 1)
+0x29, 0x03,                    //     USAGE_MAXIMUM (Button 3)
+0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
+0x25, 0x01,                    //     LOGICAL_MAXIMUM (1)
+0x95, 0x03,                    //     REPORT_COUNT (3)
+0x75, 0x01,                    //     REPORT_SIZE (1)
+0x81, 0x02,                    //     INPUT (Data,Var,Abs)
+0x95, 0x01,                    //     REPORT_COUNT (1)
+0x75, 0x05,                    //     REPORT_SIZE (5)
+0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
+0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
+0x09, 0x30,                    //     USAGE (X)
+0x09, 0x31,                    //     USAGE (Y)
+0x15, 0x81,                    //     LOGICAL_MINIMUM (-127)
+0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
+0x75, 0x08,                    //     REPORT_SIZE (8)
+0x95, 0x02,                    //     REPORT_COUNT (2)
+0x81, 0x06,                    //     INPUT (Data,Var,Rel)
+0xc0,                          //   END_COLLECTION
+0xc0                           // END_COLLECTION
+}
+```
+
+that maps to this c structure
+
+```c
+struct mouse_report_t {
+    uint8_t buttons;
+    int8_t x;
+    int8_t y;
+}
+```
