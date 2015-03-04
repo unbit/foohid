@@ -116,3 +116,57 @@ struct mouse_report_t {
     int8_t y;
 }
 ```
+
+So to create a virtual mouse:
+
+```c
+
+#include <IOKit/IOKitLib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define FOOHID_CREATE 0
+
+int main() {
+
+    io_iterator_t   iterator;
+    io_service_t    service;
+    kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching("it_unbit_foohid"), &iterator);
+    
+    if (ret != KERN_SUCCESS) {
+        printf("unable to access IOService\n");
+        exit(1);
+    }
+    
+    io_connect_t connect;
+    
+    int found = 0;
+    
+    while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL) {
+            ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
+            if (ret = KERN_SUCCESS) {
+                found = 1;
+                break;
+            }
+    }
+    IOObjectRelease(iterator);
+    
+    if (!found) {
+        printf("unable to open IOService\n");
+        exit(1);
+    }
+
+    uint32_t output_count = 1;
+    uint64_t output = 0;
+    
+    uint64_t input[4];
+    input[0] = (uint64_t) strdup("Virtual GamePad FooBar");
+    input[1] = strlen( (char *)input[0]);
+    input[2] = (uint64_t) report_descriptor;
+    input[3] = sizeof(report_descriptor);
+
+    ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, 4, &output, &output_count);
+
+
+```
