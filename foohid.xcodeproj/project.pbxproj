@@ -1,0 +1,274 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		625BDE4C1AA6EE98001573B2 /* foohid.h in Headers */ = {isa = PBXBuildFile; fileRef = 625BDE4B1AA6EE98001573B2 /* foohid.h */; };
+		625BDE4E1AA6EE98001573B2 /* foohid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 625BDE4D1AA6EE98001573B2 /* foohid.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		625BDE461AA6EE98001573B2 /* foohid.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = foohid.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		625BDE4A1AA6EE98001573B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		625BDE4B1AA6EE98001573B2 /* foohid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = foohid.h; sourceTree = "<group>"; };
+		625BDE4D1AA6EE98001573B2 /* foohid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = foohid.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		625BDE421AA6EE98001573B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		625BDE3C1AA6EE98001573B2 = {
+			isa = PBXGroup;
+			children = (
+				625BDE481AA6EE98001573B2 /* foohid */,
+				625BDE471AA6EE98001573B2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		625BDE471AA6EE98001573B2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				625BDE461AA6EE98001573B2 /* foohid.kext */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		625BDE481AA6EE98001573B2 /* foohid */ = {
+			isa = PBXGroup;
+			children = (
+				625BDE4B1AA6EE98001573B2 /* foohid.h */,
+				625BDE4D1AA6EE98001573B2 /* foohid.cpp */,
+				625BDE491AA6EE98001573B2 /* Supporting Files */,
+			);
+			path = foohid;
+			sourceTree = "<group>";
+		};
+		625BDE491AA6EE98001573B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				625BDE4A1AA6EE98001573B2 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		625BDE431AA6EE98001573B2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				625BDE4C1AA6EE98001573B2 /* foohid.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		625BDE451AA6EE98001573B2 /* foohid */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 625BDE511AA6EE98001573B2 /* Build configuration list for PBXNativeTarget "foohid" */;
+			buildPhases = (
+				625BDE411AA6EE98001573B2 /* Sources */,
+				625BDE421AA6EE98001573B2 /* Frameworks */,
+				625BDE431AA6EE98001573B2 /* Headers */,
+				625BDE441AA6EE98001573B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = foohid;
+			productName = foohid;
+			productReference = 625BDE461AA6EE98001573B2 /* foohid.kext */;
+			productType = "com.apple.product-type.kernel-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		625BDE3D1AA6EE98001573B2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = unbit;
+				TargetAttributes = {
+					625BDE451AA6EE98001573B2 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 625BDE401AA6EE98001573B2 /* Build configuration list for PBXProject "foohid" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 625BDE3C1AA6EE98001573B2;
+			productRefGroup = 625BDE471AA6EE98001573B2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				625BDE451AA6EE98001573B2 /* foohid */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		625BDE441AA6EE98001573B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		625BDE411AA6EE98001573B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				625BDE4E1AA6EE98001573B2 /* foohid.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		625BDE4F1AA6EE98001573B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		625BDE501AA6EE98001573B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		625BDE521AA6EE98001573B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.0d1;
+				INFOPLIST_FILE = foohid/Info.plist;
+				MODULE_NAME = it.unbit.foohid;
+				MODULE_VERSION = 1.0.0d1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Debug;
+		};
+		625BDE531AA6EE98001573B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.0d1;
+				INFOPLIST_FILE = foohid/Info.plist;
+				MODULE_NAME = it.unbit.foohid;
+				MODULE_VERSION = 1.0.0d1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		625BDE401AA6EE98001573B2 /* Build configuration list for PBXProject "foohid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				625BDE4F1AA6EE98001573B2 /* Debug */,
+				625BDE501AA6EE98001573B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		625BDE511AA6EE98001573B2 /* Build configuration list for PBXNativeTarget "foohid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				625BDE521AA6EE98001573B2 /* Debug */,
+				625BDE531AA6EE98001573B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 625BDE3D1AA6EE98001573B2 /* Project object */;
+}
