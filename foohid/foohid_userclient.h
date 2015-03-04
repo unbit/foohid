@@ -16,7 +16,7 @@ enum {
     it_unbit_foohid_method_create,
     it_unbit_foohid_method_destroy,
     it_unbit_foohid_method_send,
-    /*it_unbit_foohid_method_list,*/
+    it_unbit_foohid_method_list,
     it_unbit_foohid_method_last
 };
 
@@ -47,6 +47,9 @@ protected:
     
     static IOReturn methodSend(it_unbit_foohid_userclient *target, void* reference, IOExternalMethodArguments* arguments);
     virtual IOReturn _methodSend(IOExternalMethodArguments* arguments);
+    
+    static IOReturn methodList(it_unbit_foohid_userclient *target, void* reference, IOExternalMethodArguments* arguments);
+    virtual IOReturn _methodList(IOExternalMethodArguments* arguments);
 
     
 private:

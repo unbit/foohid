@@ -211,3 +211,36 @@ end:
     return false;
     
 }
+
+
+bool it_unbit_foohid::methodList(char *buf, UInt16 buf_len, UInt16 *needed, UInt16 *items) {
+    
+    if (buf_len == 0) return false;
+    
+    IOLog("building device list\n");
+    
+    UInt16 current_len = 0;
+    *needed = 0;
+    *items = 0;
+    
+    // managed hid device
+    OSCollectionIterator *iter = OSCollectionIterator::withCollection(hid_devices);
+    if (iter != NULL) {
+        const OSString *key = NULL;
+        while((key = (OSString *)iter->getNextObject()) != NULL) {
+            UInt8 key_len = key->getLength();
+            if (key_len + 1 + current_len > buf_len) {
+                *needed = buf_len + key_len + 1;
+                break;
+            }
+            memcpy(buf + current_len, key->getCStringNoCopy(), key_len);
+            buf[current_len + key_len] = 0;
+            current_len += key_len + 1;
+            (*items)++;
+        }
+        iter->release();
+    }
+    
+    if (*needed != 0) return false;
+    return true;
+}

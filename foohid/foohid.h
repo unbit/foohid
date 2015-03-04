@@ -20,6 +20,7 @@ public:
     virtual bool methodCreate(char *name, UInt8 name_len, unsigned char *report_descriptor, UInt16 report_descriptor_len);
     virtual bool methodDestroy(char *name, UInt8 name_len);
     virtual bool methodSend(char *name, UInt8 name_len, unsigned char *report_descriptor, UInt16 report_descriptor_len);
+    virtual bool methodList(char *buf, UInt16 buf_len, UInt16 *needed, UInt16 *items);
     
 };
 

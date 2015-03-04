@@ -53,6 +53,13 @@ const IOExternalMethodDispatch it_unbit_foohid_userclient::methods[it_unbit_fooh
         1,																		// No scalar output values.
         0																		// No struct output value.
     },
+    {
+        (IOExternalMethodAction) &it_unbit_foohid_userclient::methodList,	// Method pointer.
+        2,																		// No scalar input values.
+        0,																		// No struct input value.
+        2,																		// No scalar output values.
+        0																		// No struct output value.
+    },
 };
 
 IOReturn it_unbit_foohid_userclient::externalMethod(uint32_t selector, IOExternalMethodArguments* arguments,
@@ -79,6 +86,12 @@ IOReturn it_unbit_foohid_userclient::methodSend(it_unbit_foohid_userclient *targ
     IOLog("ready to call\n");
     return target->_methodSend(arguments);
 }
+
+IOReturn it_unbit_foohid_userclient::methodList(it_unbit_foohid_userclient *target, void* reference, IOExternalMethodArguments* arguments) {
+    IOLog("ready to call\n");
+    return target->_methodList(arguments);
+}
+
 
 IOReturn it_unbit_foohid_userclient::_methodDestroy(IOExternalMethodArguments* arguments) {
     
@@ -113,8 +126,58 @@ IOReturn it_unbit_foohid_userclient::_methodDestroy(IOExternalMethodArguments* a
     map->release();
     
     user_buf->release();
-       if (ret)
+    if (ret) {
+        arguments->scalarOutput[0] = 0;
         return kIOReturnSuccess;
+    }
+    return kIOReturnDeviceError;
+    
+nomem:
+    if (map) map->release();
+    if (user_buf) user_buf->release();
+    return kIOReturnNoMemory;
+}
+
+IOReturn it_unbit_foohid_userclient::_methodList(IOExternalMethodArguments* arguments) {
+    
+    IOLog("listing devices\n");
+    
+    IOMemoryDescriptor *user_buf = NULL;
+    
+    IOMemoryMap *map = NULL;
+    
+    UInt16 needed = 0, items = 0;
+    
+    
+    char *ptr = NULL;
+    bool ret = false;
+    
+    UInt8 *name_ptr = (UInt8 *) arguments->scalarInput[0];
+    UInt16 name_len = (UInt16) arguments->scalarInput[1];
+    
+    
+    user_buf = IOMemoryDescriptor::withAddressRange((vm_address_t) name_ptr, name_len, kIODirectionIn, owner);
+    if (!user_buf) goto nomem;
+    if (user_buf->prepare() != kIOReturnSuccess) goto nomem;
+    
+    map = user_buf->map();
+    if (!map) goto nomem;
+    
+    ptr = (char *) map->getAddress();
+    if (!ptr) goto nomem;
+    
+    ret = hid_provider->methodList(ptr, name_len, &needed, &items);
+    
+    user_buf->complete();
+    
+    map->release();
+    
+    user_buf->release();
+    if (ret) {
+        arguments->scalarOutput[0] = needed;
+        arguments->scalarOutput[1] = items;
+        return kIOReturnSuccess;
+    }
     return kIOReturnDeviceError;
     
 nomem:
@@ -173,8 +236,10 @@ IOReturn it_unbit_foohid_userclient::_methodCreate(IOExternalMethodArguments* ar
     user_buf->release();
     descriptor_buf->release();
     
-    if (ret)
+    if (ret) {
+        arguments->scalarOutput[0] = 0;
         return kIOReturnSuccess;
+    }
     return kIOReturnDeviceError;
 
 nomem:
@@ -234,8 +299,10 @@ IOReturn it_unbit_foohid_userclient::_methodSend(IOExternalMethodArguments* argu
     user_buf->release();
     descriptor_buf->release();
     
-    if (ret)
+    if (ret) {
+        arguments->scalarOutput[0] = 0;
         return kIOReturnSuccess;
+    }
     return kIOReturnDeviceError;
     
 nomem:
