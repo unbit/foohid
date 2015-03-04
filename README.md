@@ -117,7 +117,7 @@ struct mouse_report_t {
 }
 ```
 
-So to create a virtual mouse:
+So to create and move a virtual mouse:
 
 ```c
 
@@ -167,6 +167,22 @@ int main() {
     input[3] = sizeof(report_descriptor);
 
     ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, 4, &output, &output_count);
+    if (ret != KERN_SUCCESS) {
+        printf("unable to create HID device\n");
+        exit(1);
+    }
 
-
+    struct mouse_report_t mouse;
+    input[2] = (uint64_t) &mouse;
+    input[3] = sizeof(struct mouse_report_t);
+    
+    for(;;) {
+        mouse.buttons = 0;
+        mouse.x = rand();
+        mouse.y = rand();
+        
+        // ignore return value, just for testing
+        IOConnectCallScalarMethod(connect, 2, input, 4, &output, &output_count);
+    }
+}
 ```
