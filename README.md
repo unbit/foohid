@@ -132,6 +132,8 @@ int main() {
 
     io_iterator_t   iterator;
     io_service_t    service;
+    
+    // get a reference to the IOService
     kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching("it_unbit_foohid"), &iterator);
     
     if (ret != KERN_SUCCESS) {
@@ -143,6 +145,7 @@ int main() {
     
     int found = 0;
     
+    // Iterate till success
     while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL) {
             ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
             if (ret = KERN_SUCCESS) {
@@ -160,6 +163,7 @@ int main() {
     uint32_t output_count = 1;
     uint64_t output = 0;
     
+    // fill input args
     uint64_t input[4];
     input[0] = (uint64_t) strdup("Virtual GamePad FooBar");
     input[1] = strlen( (char *)input[0]);
@@ -172,6 +176,7 @@ int main() {
         exit(1);
     }
 
+    // update input args to pass hid message
     struct mouse_report_t mouse;
     input[2] = (uint64_t) &mouse;
     input[3] = sizeof(struct mouse_report_t);
