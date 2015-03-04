@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		625BDE4C1AA6EE98001573B2 /* foohid.h in Headers */ = {isa = PBXBuildFile; fileRef = 625BDE4B1AA6EE98001573B2 /* foohid.h */; };
 		625BDE4E1AA6EE98001573B2 /* foohid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 625BDE4D1AA6EE98001573B2 /* foohid.cpp */; };
+		625BDE561AA6F19A001573B2 /* foohid_userclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 625BDE541AA6F19A001573B2 /* foohid_userclient.cpp */; };
+		625BDE571AA6F19A001573B2 /* foohid_userclient.h in Headers */ = {isa = PBXBuildFile; fileRef = 625BDE551AA6F19A001573B2 /* foohid_userclient.h */; };
+		625BDE5A1AA7034B001573B2 /* foohid_device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 625BDE581AA7034B001573B2 /* foohid_device.cpp */; };
+		625BDE5B1AA7034B001573B2 /* foohid_device.h in Headers */ = {isa = PBXBuildFile; fileRef = 625BDE591AA7034B001573B2 /* foohid_device.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -16,6 +20,10 @@
 		625BDE4A1AA6EE98001573B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		625BDE4B1AA6EE98001573B2 /* foohid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = foohid.h; sourceTree = "<group>"; };
 		625BDE4D1AA6EE98001573B2 /* foohid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = foohid.cpp; sourceTree = "<group>"; };
+		625BDE541AA6F19A001573B2 /* foohid_userclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = foohid_userclient.cpp; sourceTree = "<group>"; };
+		625BDE551AA6F19A001573B2 /* foohid_userclient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foohid_userclient.h; sourceTree = "<group>"; };
+		625BDE581AA7034B001573B2 /* foohid_device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = foohid_device.cpp; sourceTree = "<group>"; };
+		625BDE591AA7034B001573B2 /* foohid_device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foohid_device.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +56,10 @@
 		625BDE481AA6EE98001573B2 /* foohid */ = {
 			isa = PBXGroup;
 			children = (
+				625BDE581AA7034B001573B2 /* foohid_device.cpp */,
+				625BDE591AA7034B001573B2 /* foohid_device.h */,
+				625BDE541AA6F19A001573B2 /* foohid_userclient.cpp */,
+				625BDE551AA6F19A001573B2 /* foohid_userclient.h */,
 				625BDE4B1AA6EE98001573B2 /* foohid.h */,
 				625BDE4D1AA6EE98001573B2 /* foohid.cpp */,
 				625BDE491AA6EE98001573B2 /* Supporting Files */,
@@ -71,6 +83,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				625BDE4C1AA6EE98001573B2 /* foohid.h in Headers */,
+				625BDE571AA6F19A001573B2 /* foohid_userclient.h in Headers */,
+				625BDE5B1AA7034B001573B2 /* foohid_device.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,7 +155,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				625BDE561AA6F19A001573B2 /* foohid_userclient.cpp in Sources */,
 				625BDE4E1AA6EE98001573B2 /* foohid.cpp in Sources */,
+				625BDE5A1AA7034B001573B2 /* foohid_device.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

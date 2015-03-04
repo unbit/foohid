@@ -21,10 +21,35 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>IOKitPersonalities</key>
-	<dict/>
+	<dict>
+		<key>it_unbit_foohid</key>
+		<dict>
+			<key>IOUserClientClass</key>
+			<string>it_unbit_foohid_userclient</string>
+			<key>CFBundleIdentifier</key>
+			<string>it.unbit.foohid</string>
+			<key>IOClass</key>
+			<string>it_unbit_foohid</string>
+			<key>IOMatchCategory</key>
+			<string>it_unbit_foohid</string>
+			<key>IOProviderClass</key>
+			<string>IOResources</string>
+			<key>IOResourceMatch</key>
+			<string>IOKit</string>
+		</dict>
+	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 unbit. All rights reserved.</string>
 	<key>OSBundleLibraries</key>
-	<dict/>
+	<dict>
+		<key>com.apple.kpi.mach</key>
+		<string>9.0.0</string>
+		<key>com.apple.iokit.IOHIDFamily</key>
+		<string>2.0</string>
+		<key>com.apple.kpi.iokit</key>
+		<string>9.0.0</string>
+		<key>com.apple.kpi.libkern</key>
+		<string>9.0.0</string>
+	</dict>
 </dict>
 </plist>
