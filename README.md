@@ -22,9 +22,11 @@ Now clone the foohid-py repository
 git clone https://github.com/unbit/foohid-py
 ```
 
-where 2 tests are available:
+where 3 tests are available:
 
 test_mouse.py will create a virtual mouse. Just run it, and every second your mouse pointer will move to a random position
+
+test_joypad.py will create a virtual joypad. Just run it, and every second lext and right axis will be updated.
 
 test_list.py will show the listing feature (a bunch of virtual devices will be created, listed and destroyed)
 
