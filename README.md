@@ -1,8 +1,8 @@
 # foohid
 OSX IOKit driver for implementing virtual HID devices from userspace
 
-Quick start
-===========
+Quick start (for yosemite)
+==========================
 
 Install https://github.com/unbit/foohid/releases/download/0.1/foohid.pkg and reboot your system.
 
