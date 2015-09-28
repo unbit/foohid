@@ -1,9 +1,8 @@
 #include <IOKit/IOLib.h>
 #include "foohid_device.h"
 
-OSDefineMetaClassAndStructors(it_unbit_foohid_device, IOHIDDevice)
-
 #define super IOHIDDevice
+OSDefineMetaClassAndStructors(it_unbit_foohid_device, IOHIDDevice)
 
 bool it_unbit_foohid_device::init(OSDictionary* dict) {
     IOLog("initializing a new virtual hid device\n");

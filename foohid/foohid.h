@@ -1,6 +1,3 @@
-
-
-
 #include <IOKit/IOService.h>
 
 class it_unbit_foohid : public IOService {
@@ -12,15 +9,13 @@ private:
     
 public:
     
-    virtual bool init(OSDictionary* dictionary = 0);
-    virtual void free(void);
-    virtual bool start(IOService* provider);
-    virtual void stop(IOService* provider);
+    virtual bool init(OSDictionary* dictionary = 0) override;
+    virtual void free(void) override;
+    virtual bool start(IOService* provider) override;
+    virtual void stop(IOService* provider) override;
     
     virtual bool methodCreate(char *name, UInt8 name_len, unsigned char *report_descriptor, UInt16 report_descriptor_len);
     virtual bool methodDestroy(char *name, UInt8 name_len);
     virtual bool methodSend(char *name, UInt8 name_len, unsigned char *report_descriptor, UInt16 report_descriptor_len);
     virtual bool methodList(char *buf, UInt16 buf_len, UInt16 *needed, UInt16 *items);
-    
 };
-

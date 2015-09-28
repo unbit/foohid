@@ -1,4 +1,3 @@
-
 #include <IOKit/IOService.h>
 #include <IOKit/IOUserClient.h>
 
@@ -29,15 +28,15 @@ protected:
     
 public:
     
-    virtual void stop(IOService* provider);
-    virtual bool start(IOService* provider);
+    virtual void stop(IOService* provider) override;
+    virtual bool start(IOService* provider) override;
     
-    virtual bool initWithTask(task_t owningTask, void* securityToken, UInt32 type, OSDictionary* properties);
+    virtual bool initWithTask(task_t owningTask, void* securityToken, UInt32 type, OSDictionary* properties) override;
     
 protected:
     
     virtual IOReturn externalMethod(uint32_t selector, IOExternalMethodArguments* arguments,
-                                    IOExternalMethodDispatch* dispatch, OSObject* target, void* reference);
+                                    IOExternalMethodDispatch* dispatch, OSObject* target, void* reference) override;
     
     static IOReturn methodCreate(it_unbit_foohid_userclient *target, void* reference, IOExternalMethodArguments* arguments);
     virtual IOReturn _methodCreate(IOExternalMethodArguments* arguments);

@@ -1,14 +1,10 @@
-
-
-
 #include <IOKit/IOLib.h>
 #include <libkern/OSMalloc.h>
 #include "foohid.h"
-#include "foohid_device.h";
-
-#define super IOService
+#include "foohid_device.h"
 
 OSDefineMetaClassAndStructors(it_unbit_foohid, IOService);
+#define super IOService
 
 bool it_unbit_foohid::start(IOService *provider) {
     IOLog("foohid::start\n");

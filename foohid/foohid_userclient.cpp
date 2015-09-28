@@ -1,14 +1,11 @@
-
 #include <IOKit/IOLib.h>
 #include <IOKit/IOKitKeys.h>
 
 #include "foohid_userclient.h"
 #include <string.h>
 
-#define super IOUserClient
-
-
 OSDefineMetaClassAndStructors(it_unbit_foohid_userclient, IOUserClient)
+#define super IOUserClient
 
 bool it_unbit_foohid_userclient::initWithTask(task_t owningTask, void* securityToken, UInt32 type, OSDictionary* properties) {
     IOLog("it_unbit_foohid_userclient::initWithTask()\n");
@@ -312,4 +309,3 @@ nomem:
     if (descriptor_buf) descriptor_buf->release();
     return kIOReturnNoMemory;
 }
-
