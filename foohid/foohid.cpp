@@ -10,7 +10,7 @@ bool it_unbit_foohid::start(IOService *provider) {
     IOLog("foohid::start\n");
     bool ret = super::start(provider);
     if (ret) {
-        IOLog("foohid::registerServicet\n");
+        IOLog("foohid::registerService \n");
         registerService();
         
     }
@@ -173,8 +173,7 @@ bool it_unbit_foohid::methodCreate(
         
     }
     
-    IOLog("foohid:: setting serianNumber, vendorID and productID: %d %d %d\n", serialNumber, vendorID, productID);
-    
+    IOLog("foohid:: setting serialNumber, vendorID and productID: %d %d %d\n", serialNumber, vendorID, productID);
     if (!device->init(NULL, serialNumber, vendorID, productID)) {
         device->release();
         goto end;
