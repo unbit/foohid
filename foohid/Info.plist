@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>it.unbit.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -24,8 +24,6 @@
 	<dict>
 		<key>it_unbit_foohid</key>
 		<dict>
-			<key>IOUserClientClass</key>
-			<string>it_unbit_foohid_userclient</string>
 			<key>CFBundleIdentifier</key>
 			<string>it.unbit.foohid</string>
 			<key>IOClass</key>
@@ -36,19 +34,21 @@
 			<string>IOResources</string>
 			<key>IOResourceMatch</key>
 			<string>IOKit</string>
+			<key>IOUserClientClass</key>
+			<string>it_unbit_foohid_userclient</string>
 		</dict>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 unbit. All rights reserved.</string>
 	<key>OSBundleLibraries</key>
 	<dict>
-		<key>com.apple.kpi.mach</key>
-		<string>9.0.0</string>
 		<key>com.apple.iokit.IOHIDFamily</key>
 		<string>2.0</string>
 		<key>com.apple.kpi.iokit</key>
 		<string>9.0.0</string>
 		<key>com.apple.kpi.libkern</key>
+		<string>9.0.0</string>
+		<key>com.apple.kpi.mach</key>
 		<string>9.0.0</string>
 	</dict>
 </dict>
