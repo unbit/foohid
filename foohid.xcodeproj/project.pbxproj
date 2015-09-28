@@ -24,6 +24,7 @@
 		625BDE551AA6F19A001573B2 /* foohid_userclient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foohid_userclient.h; sourceTree = "<group>"; };
 		625BDE581AA7034B001573B2 /* foohid_device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = foohid_device.cpp; sourceTree = "<group>"; };
 		625BDE591AA7034B001573B2 /* foohid_device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foohid_device.h; sourceTree = "<group>"; };
+		764F7B221BB9AE4F005252AF /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +63,7 @@
 				625BDE551AA6F19A001573B2 /* foohid_userclient.h */,
 				625BDE4D1AA6EE98001573B2 /* foohid.cpp */,
 				625BDE4B1AA6EE98001573B2 /* foohid.h */,
+				764F7B221BB9AE4F005252AF /* debug.h */,
 				625BDE491AA6EE98001573B2 /* Supporting Files */,
 			);
 			path = foohid;

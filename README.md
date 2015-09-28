@@ -244,3 +244,8 @@ curl -O https://raw.githubusercontent.com/unbit/foohid/develop/examples/mouse.c
 gcc mouse.c -o virtual_mouse -framework IOKit
 ./virtual_mouse
 ```
+
+## Logging
+
+Logging is disabled by default.
+You can enable it by building a DEBUG version by using XCode, or manually setting the `-DDEBUG` preprocessor flag.

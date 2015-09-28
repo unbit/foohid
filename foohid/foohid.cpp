@@ -1,16 +1,18 @@
 #include <IOKit/IOLib.h>
 #include <libkern/OSMalloc.h>
+
 #include "foohid.h"
 #include "foohid_device.h"
+#include "debug.h"
 
 OSDefineMetaClassAndStructors(it_unbit_foohid, IOService);
 #define super IOService
 
 bool it_unbit_foohid::start(IOService *provider) {
-    IOLog("foohid::start\n");
+    LogD("foohid::start\n");
     bool ret = super::start(provider);
     if (ret) {
-        IOLog("foohid::registerService \n");
+        LogD("foohid::registerService \n");
         registerService();
         
     }
@@ -18,7 +20,7 @@ bool it_unbit_foohid::start(IOService *provider) {
 }
 
 void it_unbit_foohid::stop(IOService *provider) {
-    IOLog("foohid::stop\n");
+    LogD("foohid::stop\n");
     // here we need to terminate() and release() every
     // managed hid device
     OSCollectionIterator *iter = OSCollectionIterator::withCollection(hid_devices);
@@ -27,7 +29,7 @@ void it_unbit_foohid::stop(IOService *provider) {
         while((key = (OSString *)iter->getNextObject()) != NULL) {
             it_unbit_foohid_device *device = (it_unbit_foohid_device *) hid_devices->getObject(key);
             if (device) {
-                IOLog("terminate device %p\n", device);
+                LogD("terminate device %p\n", device);
                 device->terminate();
                 device->release();
             }
@@ -38,17 +40,17 @@ void it_unbit_foohid::stop(IOService *provider) {
 }
 
 bool it_unbit_foohid::init(OSDictionary* dictionary) {
-    IOLog("foohid::init\n");
+    LogD("foohid::init\n");
     hid_devices = OSDictionary::withCapacity(1);
     if (!hid_devices) {
-        IOLog("foohid::unable to inizialize hid dictionary\n");
+        LogD("foohid::unable to inizialize hid dictionary\n");
         return false;
     }
     return super::init(dictionary);
 }
 
 void it_unbit_foohid::free() {
-    IOLog("foohid::free\n");
+    LogD("foohid::free\n");
     
     // clear the devices dictionary
     if (hid_devices) {
@@ -111,10 +113,10 @@ bool it_unbit_foohid::methodSend(char *name, UInt8 name_len, unsigned char *repo
     
     report->writeBytes(0, report_descriptor, report_descriptor_len);
     
-    IOLog("size of report = %d %d %d %d\n", (int) report->getLength(), report_descriptor[0], report_descriptor[1], report_descriptor[2]);
+    LogD("size of report = %d %d %d %d\n", (int) report->getLength(), report_descriptor[0], report_descriptor[1], report_descriptor[2]);
     
     if (device->handleReport(report, kIOHIDReportTypeInput) == kIOReturnSuccess) {
-        IOLog("report sent\n");
+        LogD("report sent\n");
     }
     
     report->release();
@@ -173,7 +175,7 @@ bool it_unbit_foohid::methodCreate(
         
     }
     
-    IOLog("foohid:: setting serialNumber, vendorID and productID: %d %d %d\n", serialNumber, vendorID, productID);
+    LogD("foohid:: setting serialNumber, vendorID and productID: %d %d %d\n", serialNumber, vendorID, productID);
     if (!device->init(NULL, serialNumber, vendorID, productID)) {
         device->release();
         goto end;
@@ -199,7 +201,7 @@ bool it_unbit_foohid::methodCreate(
         goto end;
     }
     
-    IOLog("foohid:: attempt to create a new virtual device: %s\n", cname);
+    LogD("foohid:: attempt to create a new virtual device: %s\n", cname);
 
     IOFree(cname, name_len+1);
     key->release();
@@ -222,7 +224,7 @@ bool it_unbit_foohid::methodList(char *buf, UInt16 buf_len, UInt16 *needed, UInt
     
     if (buf_len == 0) return false;
     
-    IOLog("building device list\n");
+    LogD("building device list\n");
     
     UInt16 current_len = 0;
     *needed = 0;

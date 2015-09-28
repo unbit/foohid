@@ -2,20 +2,21 @@
 #include <IOKit/IOKitKeys.h>
 
 #include "foohid_userclient.h"
+#include "debug.h"
 #include <string.h>
 
 OSDefineMetaClassAndStructors(it_unbit_foohid_userclient, IOUserClient)
 #define super IOUserClient
 
 bool it_unbit_foohid_userclient::initWithTask(task_t owningTask, void* securityToken, UInt32 type, OSDictionary* properties) {
-    IOLog("it_unbit_foohid_userclient::initWithTask()\n");
+    LogD("it_unbit_foohid_userclient::initWithTask()\n");
     owner = owningTask;
     bool ret = super::initWithTask(owningTask, securityToken, type, properties);
     return ret;
 }
 
 bool it_unbit_foohid_userclient::start(IOService* provider) {
-    IOLog("it_unbit_foohid_userclient::start()\n");
+    LogD("it_unbit_foohid_userclient::start()\n");
     hid_provider = OSDynamicCast(it_unbit_foohid, provider);
     if (hid_provider == NULL) {
         return false;
@@ -24,7 +25,7 @@ bool it_unbit_foohid_userclient::start(IOService* provider) {
 }
 
 void it_unbit_foohid_userclient::stop(IOService *provider) {
-    IOLog("it_unbit_foohid_userclient::stop()\n");
+    LogD("it_unbit_foohid_userclient::stop()\n");
     super::stop(provider);
 }
 
@@ -61,7 +62,7 @@ const IOExternalMethodDispatch it_unbit_foohid_userclient::methods[it_unbit_fooh
 
 IOReturn it_unbit_foohid_userclient::externalMethod(uint32_t selector, IOExternalMethodArguments* arguments,
                                                    IOExternalMethodDispatch* dispatch, OSObject* target, void* reference) {
-    IOLog("it_unbit_foohid_userclient calling %d\n", selector);
+    LogD("it_unbit_foohid_userclient calling %d\n", selector);
     if (selector < it_unbit_foohid_method_last) {
         dispatch = (IOExternalMethodDispatch *) &methods[selector];
         target = this;
@@ -70,22 +71,22 @@ IOReturn it_unbit_foohid_userclient::externalMethod(uint32_t selector, IOExterna
 }
 
 IOReturn it_unbit_foohid_userclient::methodCreate(it_unbit_foohid_userclient *target, void* reference, IOExternalMethodArguments* arguments) {
-    IOLog("ready to call\n");
+    LogD("ready to call\n");
     return target->_methodCreate(arguments);
 }
 
 IOReturn it_unbit_foohid_userclient::methodDestroy(it_unbit_foohid_userclient *target, void* reference, IOExternalMethodArguments* arguments) {
-    IOLog("ready to call\n");
+    LogD("ready to call\n");
     return target->_methodDestroy(arguments);
 }
 
 IOReturn it_unbit_foohid_userclient::methodSend(it_unbit_foohid_userclient *target, void* reference, IOExternalMethodArguments* arguments) {
-    IOLog("ready to call\n");
+    LogD("ready to call\n");
     return target->_methodSend(arguments);
 }
 
 IOReturn it_unbit_foohid_userclient::methodList(it_unbit_foohid_userclient *target, void* reference, IOExternalMethodArguments* arguments) {
-    IOLog("ready to call\n");
+    LogD("ready to call\n");
     return target->_methodList(arguments);
 }
 
@@ -137,7 +138,7 @@ nomem:
 
 IOReturn it_unbit_foohid_userclient::_methodList(IOExternalMethodArguments* arguments) {
     
-    IOLog("listing devices\n");
+    LogD("listing devices\n");
     
     IOMemoryDescriptor *user_buf = NULL;
     
