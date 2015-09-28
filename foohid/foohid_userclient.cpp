@@ -31,7 +31,7 @@ void it_unbit_foohid_userclient::stop(IOService *provider) {
 const IOExternalMethodDispatch it_unbit_foohid_userclient::methods[it_unbit_foohid_method_last] = {
     {
         (IOExternalMethodAction) &it_unbit_foohid_userclient::methodCreate,	// Method pointer.
-        4,																		// No scalar input values.
+        7,																		// No scalar input values.
         0,																		// No struct input value.
         1,																		// No scalar output values.
         0																		// No struct output value.
@@ -152,7 +152,6 @@ IOReturn it_unbit_foohid_userclient::_methodList(IOExternalMethodArguments* argu
     UInt8 *name_ptr = (UInt8 *) arguments->scalarInput[0];
     UInt16 name_len = (UInt16) arguments->scalarInput[1];
     
-    
     user_buf = IOMemoryDescriptor::withAddressRange((vm_address_t) name_ptr, name_len, kIODirectionIn, owner);
     if (!user_buf) goto nomem;
     if (user_buf->prepare() != kIOReturnSuccess) goto nomem;
@@ -201,6 +200,10 @@ IOReturn it_unbit_foohid_userclient::_methodCreate(IOExternalMethodArguments* ar
     UInt8 *descriptor_ptr = (UInt8 *) arguments->scalarInput[2];
     UInt16 descriptor_len = (UInt16) arguments->scalarInput[3];
     
+    UInt32 serialNumber = (UInt32) arguments->scalarInput[4];
+    UInt32 vendorID = (UInt32) arguments->scalarInput[5];
+    UInt32 productID = (UInt32) arguments->scalarInput[6];
+    
     user_buf = IOMemoryDescriptor::withAddressRange((vm_address_t) name_ptr, name_len, kIODirectionOut, owner);
     if (!user_buf) goto nomem;
     if (user_buf->prepare() != kIOReturnSuccess) goto nomem;
@@ -222,7 +225,7 @@ IOReturn it_unbit_foohid_userclient::_methodCreate(IOExternalMethodArguments* ar
     ptr2 = (unsigned char *) map2->getAddress();
     if (!ptr2) goto nomem;
     
-    ret = hid_provider->methodCreate(ptr, name_len, ptr2, descriptor_len);
+    ret = hid_provider->methodCreate(ptr, name_len, ptr2, descriptor_len, serialNumber, vendorID, productID);
     
     user_buf->complete();
     descriptor_buf->complete();

@@ -4,8 +4,17 @@
 #define super IOHIDDevice
 OSDefineMetaClassAndStructors(it_unbit_foohid_device, IOHIDDevice)
 
-bool it_unbit_foohid_device::init(OSDictionary* dict) {
+bool it_unbit_foohid_device::init(
+                                  OSDictionary* dict,
+                                  uint32_t serialNumber,
+                                  uint32_t vendorID,
+                                  uint32_t productID
+                                  ) {
     IOLog("initializing a new virtual hid device\n");
+    
+    m_SerialNumber = serialNumber;
+    m_VendorID = vendorID;
+    m_ProductID = productID;
     
     if (!super::init(dict)) return false;
     
@@ -13,6 +22,10 @@ bool it_unbit_foohid_device::init(OSDictionary* dict) {
         setProperty("HIDDefaultBehavior", OSString::withCString("Mouse"));
     
     return true;
+}
+
+bool it_unbit_foohid_device::init(OSDictionary* dict) {
+    return it_unbit_foohid_device::init(dict, 0, 0);
 }
 
 bool it_unbit_foohid_device::start(IOService *provider) {
@@ -54,4 +67,16 @@ IOReturn it_unbit_foohid_device::newReportDescriptor(IOMemoryDescriptor **descri
 
 OSString* it_unbit_foohid_device::newProductString() const {
     return OSString::withString(name);
+}
+
+OSNumber* it_unbit_foohid_device::newSerialNumber() const {
+    return OSNumber::withNumber(m_SerialNumber, 32);
+}
+
+OSNumber *it_unbit_foohid_device::newVendorIDNumber() const {
+    return OSNumber::withNumber(m_VendorID, 32);
+}
+
+OSNumber *it_unbit_foohid_device::newProductIDNumber() const {
+    return OSNumber::withNumber(m_ProductID, 32);
 }

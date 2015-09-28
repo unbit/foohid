@@ -130,7 +130,15 @@ end:
     return false;
 }
 
-bool it_unbit_foohid::methodCreate(char *name, UInt8 name_len, unsigned char *report_descriptor, UInt16 report_descriptor_len) {
+bool it_unbit_foohid::methodCreate(
+                                   char *name,
+                                   UInt8 name_len,
+                                   unsigned char *report_descriptor,
+                                   UInt16 report_descriptor_len,
+                                   UInt32 serialNumber,
+                                   UInt32 vendorID,
+                                   UInt32 productID
+                                   ) {
     
     OSString *key = NULL;
     it_unbit_foohid_device *device = NULL;
@@ -165,7 +173,9 @@ bool it_unbit_foohid::methodCreate(char *name, UInt8 name_len, unsigned char *re
         
     }
     
-    if (!device->init(NULL)) {
+    IOLog("foohid:: setting serianNumber, vendorID and productID: %d %d %d\n", serialNumber, vendorID, productID);
+    
+    if (!device->init(NULL, serialNumber, vendorID, productID)) {
         device->release();
         goto end;
     }
