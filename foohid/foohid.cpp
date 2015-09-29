@@ -137,12 +137,14 @@ bool it_unbit_foohid::methodCreate(
                                    UInt8 name_len,
                                    unsigned char *report_descriptor,
                                    UInt16 report_descriptor_len,
-                                   UInt32 serialNumber,
+                                   char *serialNumber,
+                                   UInt16 serialNumber_len,
                                    UInt32 vendorID,
                                    UInt32 productID
                                    ) {
     
     OSString *key = NULL;
+    OSString *serialNumberString;
     it_unbit_foohid_device *device = NULL;
     
     if (report_descriptor_len == 0 || name_len == 0) return false;
@@ -152,8 +154,20 @@ bool it_unbit_foohid::methodCreate(
     memcpy(cname, name, name_len);
     cname[name_len] = 0;
     
+    char *cSerialNumber = (char *) IOMalloc(serialNumber_len + 1);
+    if (!cSerialNumber) {
+        return false;
+    }
+    memcpy(cSerialNumber, serialNumber, serialNumber_len);
+    cSerialNumber[serialNumber_len] = 0;
+    
     key = OSString::withCString(cname);
     if (!key) goto end;
+    
+    serialNumberString = OSString::withCString(cSerialNumber);
+    if (!serialNumberString) {
+        goto end;
+    }
     
     // is the device already created ?
     device = (it_unbit_foohid_device *) hid_devices->getObject(OSString::withCString(cname));
@@ -172,11 +186,10 @@ bool it_unbit_foohid::methodCreate(
             report_descriptor[3] == 0x02) {
             device->isMouse = true;
         }
-        
     }
     
-    LogD("foohid:: setting serialNumber, vendorID and productID: %d %d %d\n", serialNumber, vendorID, productID);
-    if (!device->init(NULL, serialNumber, vendorID, productID)) {
+    LogD("foohid:: setting serialNumber, vendorID and productID: %s %d %d\n", cSerialNumber, vendorID, productID);
+    if (!device->init(NULL, serialNumberString, vendorID, productID)) {
         device->release();
         goto end;
     }
@@ -194,7 +207,6 @@ bool it_unbit_foohid::methodCreate(
         device->release();
         goto end;
     }
-    
 
     if (!hid_devices->setObject(key, device)) {
         device->release();
@@ -205,7 +217,7 @@ bool it_unbit_foohid::methodCreate(
 
     IOFree(cname, name_len+1);
     key->release();
-    
+    IOFree(cSerialNumber, serialNumber_len + 1);
     
     device->attach(this);
     device->start(this);
@@ -215,8 +227,8 @@ bool it_unbit_foohid::methodCreate(
 end:
     IOFree(cname, name_len+1);
     if (key) key->release();
+    IOFree(cSerialNumber, serialNumber_len + 1);
     return false;
-    
 }
 
 

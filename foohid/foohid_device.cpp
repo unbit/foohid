@@ -7,13 +7,13 @@ OSDefineMetaClassAndStructors(it_unbit_foohid_device, IOHIDDevice)
 
 bool it_unbit_foohid_device::init(
                                   OSDictionary* dict,
-                                  uint32_t serialNumber,
+                                  OSString* serialNumberString,
                                   uint32_t vendorID,
                                   uint32_t productID
                                   ) {
     LogD("initializing a new virtual hid device\n");
     
-    m_SerialNumber = serialNumber;
+    m_SerialNumberString = serialNumberString;
     m_VendorID = vendorID;
     m_ProductID = productID;
     
@@ -44,9 +44,15 @@ void it_unbit_foohid_device::free() {
     if (reportDescriptor) {
         IOFree(reportDescriptor, reportDescriptor_len);
     }
+    
     if (name) {
         name->release();
     }
+    
+    if (m_SerialNumberString) {
+        m_SerialNumberString->release();
+    }
+    
     super::free();
 }
 
@@ -70,8 +76,8 @@ OSString* it_unbit_foohid_device::newProductString() const {
     return OSString::withString(name);
 }
 
-OSNumber* it_unbit_foohid_device::newSerialNumber() const {
-    return OSNumber::withNumber(m_SerialNumber, 32);
+OSString* it_unbit_foohid_device::newSerialNumberString() const {
+    return OSString::withString(m_SerialNumberString);
 }
 
 OSNumber *it_unbit_foohid_device::newVendorIDNumber() const {

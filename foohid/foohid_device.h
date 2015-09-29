@@ -7,7 +7,7 @@ public:
     virtual bool init(OSDictionary *dictionary = 0) override;
     virtual bool init(
                       OSDictionary *dictionary = 0,
-                      uint32_t serialNumber = 0,
+                      OSString* serialNumberString = NULL,
                       uint32_t vendorID = 0,
                       uint32_t productID = 0
                       );
@@ -18,7 +18,7 @@ public:
     virtual IOReturn newReportDescriptor(IOMemoryDescriptor** descriptor) const override;
     virtual OSString* newProductString() const override;
     
-    virtual OSNumber* newSerialNumber() const override;
+    virtual OSString* newSerialNumberString() const override;
     virtual OSNumber* newVendorIDNumber() const override;
     virtual OSNumber* newProductIDNumber() const override;
     
@@ -30,7 +30,7 @@ public:
     bool isMouse;
     
 private:
-    uint32_t m_SerialNumber;
+    OSString *m_SerialNumberString;
     uint32_t m_VendorID;
     uint32_t m_ProductID;
 };

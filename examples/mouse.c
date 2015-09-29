@@ -41,6 +41,7 @@ struct mouse_report_t {
 #define FOOHID_CREATE 0  // create selector
 #define FOOHID_SEND 2  // send selector
 #define DEVICE_NAME "Foohid Virtual Mouse"
+#define DEVICE_SN "SN 123456"
 
 int main() {
 
@@ -51,7 +52,7 @@ int main() {
     kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching("it_unbit_foohid"), &iterator);
 
     if (ret != KERN_SUCCESS) {
-        printf("unable to access IOService\n");
+        printf("Unable to access IOService.\n");
         exit(1);
     }
 
@@ -69,7 +70,7 @@ int main() {
     IOObjectRelease(iterator);
 
     if (!found) {
-        printf("unable to open IOService\n");
+        printf("Unable to open IOService.\n");
         exit(1);
     }
 
@@ -77,19 +78,20 @@ int main() {
     uint64_t output = 0;
 
     // fill input args
-    uint32_t input_count = 7;
+    uint32_t input_count = 8;
     uint64_t input[input_count];
     input[0] = (uint64_t) strdup(DEVICE_NAME);  // device name
     input[1] = strlen((char *)input[0]);  // name length
     input[2] = (uint64_t) report_descriptor;  // report descriptor
     input[3] = sizeof(report_descriptor);  // report descriptor len
-    input[4] = (uint64_t) 1;  // serial number
-    input[5] = (uint64_t) 2;  // vendor ID
-    input[6] = (uint64_t) 3;  // device ID
+    input[4] = (uint64_t) strdup(DEVICE_SN);  // serial number
+    input[5] = strlen((char *)input[4]);  // serial number len
+    input[6] = (uint64_t) 2;  // vendor ID
+    input[7] = (uint64_t) 3;  // device ID
 
     ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, input_count, &output, &output_count);
     if (ret != KERN_SUCCESS) {
-        printf("unable to create HID device\n");
+        printf("Unable to create HID device.\n");
         exit(1);
     }
 
@@ -108,7 +110,7 @@ int main() {
         mouse.y = rand();
 
         // ignore return value, just for testing
-        IOConnectCallScalarMethod(connect, FOOHID_SEND, input, 4, &output, &output_count);
+        IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, &output, &output_count);
 
         sleep(1);  // sleep for a second
     }
