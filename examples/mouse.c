@@ -1,3 +1,8 @@
+/**
+ * Create a virtual mouse.
+ * Compile me with: gcc mouse.c -o virtual_mouse -framework IOKit
+ */
+
 #include <IOKit/IOKitLib.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,34 +43,38 @@ struct mouse_report_t {
     int8_t y;
 };
 
+#define SERVICE_NAME "it_unbit_foohid"
+
 #define FOOHID_CREATE 0  // create selector
 #define FOOHID_SEND 2  // send selector
+
 #define DEVICE_NAME "Foohid Virtual Mouse"
 #define DEVICE_SN "SN 123456"
 
 int main() {
+    io_iterator_t iterator;
+    io_service_t service;
+    io_connect_t connect;
 
-    io_iterator_t   iterator;
-    io_service_t    service;
-
-    // get a reference to the IOService
-    kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching("it_unbit_foohid"), &iterator);
+    // Get a reference to the IOService
+    kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(SERVICE_NAME), &iterator);
 
     if (ret != KERN_SUCCESS) {
         printf("Unable to access IOService.\n");
         exit(1);
     }
 
-    io_connect_t connect;
-
     // Iterate till success
     int found = 0;
     while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL) {
         ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
+
         if (ret == KERN_SUCCESS) {
             found = 1;
             break;
         }
+
+        IOObjectRelease(service);
     }
     IOObjectRelease(iterator);
 
@@ -74,10 +83,7 @@ int main() {
         exit(1);
     }
 
-    uint32_t output_count = 1;
-    uint64_t output = 0;
-
-    // fill input args
+    // Fill up the input arguments.
     uint32_t input_count = 8;
     uint64_t input[input_count];
     input[0] = (uint64_t) strdup(DEVICE_NAME);  // device name
@@ -89,13 +95,13 @@ int main() {
     input[6] = (uint64_t) 2;  // vendor ID
     input[7] = (uint64_t) 3;  // device ID
 
-    ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, input_count, &output, &output_count);
+    ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, input_count, NULL, 0);
     if (ret != KERN_SUCCESS) {
         printf("Unable to create HID device.\n");
         exit(1);
     }
 
-    // args to pass hid message
+    // Arguments to be passed through the HID message.
     struct mouse_report_t mouse;
     uint32_t send_count = 4;
     uint64_t send[send_count];
@@ -109,8 +115,10 @@ int main() {
         mouse.x = rand();
         mouse.y = rand();
 
-        // ignore return value, just for testing
-        IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, &output, &output_count);
+        ret = IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, NULL, 0);
+        if (ret != KERN_SUCCESS) {
+            printf("Unable to send message to HID device.\n");
+        }
 
         sleep(1);  // sleep for a second
     }
