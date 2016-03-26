@@ -110,8 +110,7 @@ int main() {
 
     ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, input_count, NULL, 0);
     if (ret != KERN_SUCCESS) {
-        printf("Unable to create HID device.\n");
-        exit(1);
+        printf("Unable to create HID device. May be fine if created previously.\n");
     }
 
     // Arguments to be passed through the HID message.
