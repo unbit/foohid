@@ -4,7 +4,7 @@ OSX IOKit driver for implementing virtual HID devices from userspace.
 
 ## Quick start (for OSX Yosemite and later)
 
-Install the [latest release](https://github.com/unbit/foohid/releases/download/0.1/foohid.pkg) and reboot your system.
+Simply install the [latest release](https://github.com/unbit/foohid/releases/latest) (no need to restart).
 The `kext` will expose a `IOUserClient`, allowing you to create and manage virtual HID devices from userspace applications.
 
 ## Examples
