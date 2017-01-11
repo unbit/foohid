@@ -1,0 +1,3 @@
+#!/bin/sh
+
+log stream --predicate 'senderImagePath contains[cd] "foohid"' --info
