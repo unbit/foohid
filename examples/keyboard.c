@@ -121,22 +121,24 @@ int main() {
     send[1] = strlen((char *)input[0]);  // name length
     send[2] = (uint64_t) &keyboard;  // keyboard struct
     send[3] = sizeof(struct keyboard_report_t);  // keyboard struct len
+    
+    keyboard.modifier = 0;
 
-    int i = 0;
-    for(i = 0; ; i++) {
-        keyboard.modifier = 0;
-
-        if (i % 2 == 0) {
-            keyboard.key_codes[0] = 0x04;
-        } else {
-            keyboard.key_codes[0] = 0x00;
-        }
-
+    for(;;) {
+        // Send 'a' key
+        keyboard.key_codes[0] = 0x04;
         ret = IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, NULL, 0);
         if (ret != KERN_SUCCESS) {
             printf("Unable to send message to HID device.\n");
         }
+        sleep(1); // sleep for a second
 
-        sleep(1);  // sleep for a second
+        // Send key-up
+        keyboard.key_codes[0] = 0x00;
+        ret = IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, NULL, 0);
+        if (ret != KERN_SUCCESS) {
+            printf("Unable to send message to HID device.\n");
+        }
+        sleep(10); // sleep for a second
     }
 }
