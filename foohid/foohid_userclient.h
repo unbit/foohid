@@ -2,7 +2,7 @@
 #include <IOKit/IOUserClient.h>
 
 #include "foohid.h"
-#include "user_kernel_shared.h"
+#include "foohid_user_kernel_shared.h"
 
 
 

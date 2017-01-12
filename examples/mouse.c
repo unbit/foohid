@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "user_kernel_shared.h"
+#include "foohid_user_kernel_shared.h"
 
 unsigned char report_descriptor[] = {
     0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
