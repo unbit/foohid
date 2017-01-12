@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "user_kernel_shared.h"
+
 unsigned char report_descriptor[] = {
   0x06, 0xD0, 0xF1,  // Usage Page (Reserved 0xF1D0)
   0x09, 0x01,        // Usage (0x01)
@@ -26,13 +28,6 @@ unsigned char report_descriptor[] = {
   0x91, 0x02,        //   Output (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
   0xC0,              // End Collection
 };
-
-#define SERVICE_NAME "it_unbit_foohid"
-
-#define FOOHID_CREATE 0   // create selector
-#define FOOHID_DESTROY 1  // destroy selector
-#define FOOHID_SEND 2     // send selector
-#define FOOHID_LIST 3     // list selector
 
 #define DEVICE_NAME "Foohid Virtual U2F Device"
 #define DEVICE_SN "SN 123456"
@@ -82,7 +77,7 @@ int main() {
     input[7] = (uint64_t) 3;  // device ID
 
     printf("Creating HID device\n");
-    ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, input_count, NULL, 0);
+    ret = IOConnectCallScalarMethod(connect, it_unbit_foohid_method_create, input, input_count, NULL, 0);
     if (ret != KERN_SUCCESS) {
         printf("Unable to create HID device. May be fine if created previously.\n");
     }

@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "user_kernel_shared.h"
+
 unsigned char report_descriptor[] = {
      0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
     0x09, 0x06,                    // USAGE (Keyboard)
@@ -56,11 +58,6 @@ struct keyboard_report_t {
     uint8_t reserved_bis;
 };
 
-#define SERVICE_NAME "it_unbit_foohid"
-
-#define FOOHID_CREATE 0  // create selector
-#define FOOHID_SEND 2  // send selector
-
 #define DEVICE_NAME "Foohid Virtual KB"
 #define DEVICE_SN "SN 123456"
 
@@ -108,7 +105,7 @@ int main() {
     input[6] = (uint64_t) 2;  // vendor ID
     input[7] = (uint64_t) 3;  // device ID
 
-    ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, input_count, NULL, 0);
+    ret = IOConnectCallScalarMethod(connect, it_unbit_foohid_method_create, input, input_count, NULL, 0);
     if (ret != KERN_SUCCESS) {
         printf("Unable to create HID device. May be fine if created previously.\n");
     }
@@ -127,7 +124,7 @@ int main() {
     for(;;) {
         // Send 'a' key
         keyboard.key_codes[0] = 0x04;
-        ret = IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, NULL, 0);
+        ret = IOConnectCallScalarMethod(connect, it_unbit_foohid_method_send, send, send_count, NULL, 0);
         if (ret != KERN_SUCCESS) {
             printf("Unable to send message to HID device.\n");
         }
@@ -135,7 +132,7 @@ int main() {
 
         // Send key-up
         keyboard.key_codes[0] = 0x00;
-        ret = IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, NULL, 0);
+        ret = IOConnectCallScalarMethod(connect, it_unbit_foohid_method_send, send, send_count, NULL, 0);
         if (ret != KERN_SUCCESS) {
             printf("Unable to send message to HID device.\n");
         }

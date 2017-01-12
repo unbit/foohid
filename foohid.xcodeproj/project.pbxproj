@@ -51,6 +51,7 @@
 /* Begin PBXFileReference section */
 		513A9DC11E27E6B200F36B5F /* mouse-example */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mouse-example"; sourceTree = BUILT_PRODUCTS_DIR; };
 		513A9DCD1E27E6D500F36B5F /* u2f-example */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "u2f-example"; sourceTree = BUILT_PRODUCTS_DIR; };
+		513A9DD51E27EE0800F36B5F /* user_kernel_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = user_kernel_shared.h; sourceTree = "<group>"; };
 		519FFDBE1E26ED5D0083F408 /* keyboard.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = keyboard.c; path = examples/keyboard.c; sourceTree = "<group>"; };
 		519FFDBF1E26ED5D0083F408 /* mouse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mouse.c; path = examples/mouse.c; sourceTree = "<group>"; };
 		519FFDC01E26ED5D0083F408 /* u2f.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = u2f.c; path = examples/u2f.c; sourceTree = "<group>"; };
@@ -136,6 +137,7 @@
 				625BDE591AA7034B001573B2 /* foohid_device.h */,
 				625BDE541AA6F19A001573B2 /* foohid_userclient.cpp */,
 				625BDE551AA6F19A001573B2 /* foohid_userclient.h */,
+				513A9DD51E27EE0800F36B5F /* user_kernel_shared.h */,
 				625BDE4D1AA6EE98001573B2 /* foohid.cpp */,
 				625BDE4B1AA6EE98001573B2 /* foohid.h */,
 				625BDE491AA6EE98001573B2 /* Supporting Files */,

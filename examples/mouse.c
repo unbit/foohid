@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "user_kernel_shared.h"
+
 unsigned char report_descriptor[] = {
     0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
     0x09, 0x02,                    // USAGE (Mouse)
@@ -42,11 +44,6 @@ struct mouse_report_t {
     int8_t x;
     int8_t y;
 };
-
-#define SERVICE_NAME "it_unbit_foohid"
-
-#define FOOHID_CREATE 0  // create selector
-#define FOOHID_SEND 2  // send selector
 
 #define DEVICE_NAME "Foohid Virtual Mouse"
 #define DEVICE_SN "SN 123456"
@@ -95,7 +92,7 @@ int main() {
     input[6] = (uint64_t) 2;  // vendor ID
     input[7] = (uint64_t) 3;  // device ID
 
-    ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, input_count, NULL, 0);
+    ret = IOConnectCallScalarMethod(connect, it_unbit_foohid_method_create, input, input_count, NULL, 0);
     if (ret != KERN_SUCCESS) {
         printf("Unable to create HID device. May be fine if created previously.\n");
     }
@@ -114,7 +111,7 @@ int main() {
         mouse.x = rand();
         mouse.y = rand();
 
-        ret = IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, NULL, 0);
+        ret = IOConnectCallScalarMethod(connect, it_unbit_foohid_method_send, send, send_count, NULL, 0);
         if (ret != KERN_SUCCESS) {
             printf("Unable to send message to HID device.\n");
         }

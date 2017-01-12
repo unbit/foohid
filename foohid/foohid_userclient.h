@@ -2,18 +2,9 @@
 #include <IOKit/IOUserClient.h>
 
 #include "foohid.h"
+#include "user_kernel_shared.h"
 
-/**
- The goal of this User Client is to expose to user space the following selector.
-*/
-enum {
-    it_unbit_foohid_method_create,
-    it_unbit_foohid_method_destroy,
-    it_unbit_foohid_method_send,
-    it_unbit_foohid_method_list,
-    
-    it_unbit_foohid_method_count  // Keep track of the length of this enum.
-};
+
 
 class it_unbit_foohid_userclient : public IOUserClient {
     OSDeclareDefaultStructors(it_unbit_foohid_userclient);
