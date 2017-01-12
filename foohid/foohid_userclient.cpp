@@ -28,21 +28,48 @@ bool it_unbit_foohid_userclient::initWithTask(task_t owningTask, void *securityT
 bool it_unbit_foohid_userclient::start(IOService *provider) {
     LogD("Executing 'it_unbit_foohid_userclient::start()'.");
     
-    if (!super::start(provider)) {
-        return false;
-    }
-    
     m_hid_provider = OSDynamicCast(it_unbit_foohid, provider);
     if (!m_hid_provider) {
         return false;
     }
     
-    return true;
+    return super::start(provider);
 }
 
 void it_unbit_foohid_userclient::stop(IOService *provider) {
     LogD("Executing 'it_unbit_foohid_userclient::stop()'.");
     super::stop(provider);
+}
+
+// clientClose is called as a result of the user process calling IOServiceClose.
+IOReturn it_unbit_foohid_userclient::clientClose(void)
+{
+    LogD("Executing 'it_unbit_foohid_userclient::clientClose()'.");
+    
+    (void) methodClose();
+    
+    bool success = terminate();
+    if (!success) {
+        LogD("terminate() failed.");
+    }
+    
+    // DON'T call super::clientClose, which just returns kIOReturnUnsupported.
+    
+    return kIOReturnSuccess;
+}
+
+// didTerminate is called at the end of the termination process. It is a notification
+// that a provider has been terminated, sent after recursing up the stack, in leaf-to-root order.
+bool it_unbit_foohid_userclient::didTerminate(IOService* provider, IOOptionBits options, bool* defer)
+{
+    LogD("Executing 'it_unbit_foohid_userclient::didTerminate()'.");
+    
+    // If all pending I/O has been terminated, close our provider. If I/O is still outstanding, set defer to true
+    // and the user client will not have stop called on it.
+    methodClose();
+    *defer = false;
+    
+    return super::didTerminate(provider, options, defer);
 }
 
 /**
@@ -59,6 +86,8 @@ void it_unbit_foohid_userclient::stop(IOService *provider) {
  *  };
  */
 const IOExternalMethodDispatch it_unbit_foohid_userclient::s_methods[it_unbit_foohid_method_count] = {
+    {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodOpen, 0, 0, 0, 0},
+    {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodClose, 0, 0, 0, 0},
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodCreate, 8, 0, 0, 0},
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodDestroy, 2, 0, 0, 0},
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodSend, 4, 0, 0, 0},
@@ -78,6 +107,16 @@ IOReturn it_unbit_foohid_userclient::externalMethod(uint32_t selector, IOExterna
     reference = nullptr;
     
     return super::externalMethod(selector, arguments, dispatch, target, reference);
+}
+
+IOReturn it_unbit_foohid_userclient::sMethodOpen(it_unbit_foohid_userclient *target, void *reference,
+                                                   IOExternalMethodArguments *arguments) {
+    return target->methodOpen();
+}
+
+IOReturn it_unbit_foohid_userclient::sMethodClose(it_unbit_foohid_userclient *target, void *reference,
+                                                   IOExternalMethodArguments *arguments) {
+    return target->methodClose();
 }
 
 IOReturn it_unbit_foohid_userclient::sMethodCreate(it_unbit_foohid_userclient *target, void *reference,
@@ -100,7 +139,40 @@ IOReturn it_unbit_foohid_userclient::sMethodList(it_unbit_foohid_userclient *tar
     return target->methodList(arguments);
 }
 
+IOReturn it_unbit_foohid_userclient::methodOpen() {
+    if (m_hid_provider == NULL || isInactive()) {
+        LogD("methodOpen->kIOReturnNotAttached");
+        return kIOReturnNotAttached;
+    }
+
+    if (!m_hid_provider->open(this)) {
+        LogD("methodOpen->kIOReturnExclusiveAccess");
+        return kIOReturnExclusiveAccess;
+    }
+    
+    LogD("methodOpen->kIOReturnSuccess");
+    return kIOReturnSuccess;
+}
+
+IOReturn it_unbit_foohid_userclient::methodClose() {
+    if (m_hid_provider == NULL) {
+        return kIOReturnNotAttached;
+    }
+    
+    if (!m_hid_provider->isOpen(this)) {
+        return kIOReturnNotOpen;
+    }
+    
+    m_hid_provider->close(this);
+
+    return kIOReturnSuccess;
+}
+
 IOReturn it_unbit_foohid_userclient::methodCreate(IOExternalMethodArguments *arguments) {
+    if (m_hid_provider == NULL || isInactive()) {
+        return kIOReturnNotAttached;
+    }
+
     IOMemoryDescriptor *user_buf = nullptr;
     IOMemoryDescriptor *descriptor_buf = nullptr;
     IOMemoryDescriptor *serial_number_buf = nullptr;
@@ -202,6 +274,10 @@ nomem:
 }
 
 IOReturn it_unbit_foohid_userclient::methodDestroy(IOExternalMethodArguments *arguments) {
+    if (m_hid_provider == NULL || isInactive()) {
+        return kIOReturnNotAttached;
+    }
+
     IOMemoryDescriptor *user_buf = nullptr;
     bool user_buf_complete = false;
     
@@ -245,6 +321,10 @@ nomem:
 }
 
 IOReturn it_unbit_foohid_userclient::methodSend(IOExternalMethodArguments *arguments) {
+    if (m_hid_provider == NULL || isInactive()) {
+        return kIOReturnNotAttached;
+    }
+
     IOMemoryDescriptor *user_buf = nullptr;
     IOMemoryDescriptor *descriptor_buf = nullptr;
     IOMemoryMap *map = nullptr;
@@ -309,6 +389,10 @@ nomem:
 }
 
 IOReturn it_unbit_foohid_userclient::methodList(IOExternalMethodArguments *arguments) {
+    if (m_hid_provider == NULL || isInactive()) {
+        return kIOReturnNotAttached;
+    }
+
     IOMemoryDescriptor *user_buf = nullptr;
     
     IOMemoryMap *map = nullptr;

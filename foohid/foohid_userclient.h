@@ -15,6 +15,9 @@ public:
     
     virtual bool start(IOService *provider) override;
     virtual void stop(IOService *provider) override;
+    virtual IOReturn clientClose(void) override;
+    virtual bool didTerminate(IOService* provider, IOOptionBits options, bool* defer) override;
+    
     
     virtual IOReturn externalMethod(uint32_t selector,
                                     IOExternalMethodArguments *arguments,
@@ -26,6 +29,8 @@ protected:
      * The following methods unpack/handle the given arguments and 
      * call the related driver method.
      */
+    virtual IOReturn methodOpen();
+    virtual IOReturn methodClose();
     virtual IOReturn methodCreate(IOExternalMethodArguments *arguments);
     virtual IOReturn methodDestroy(IOExternalMethodArguments *arguments);
     virtual IOReturn methodSend(IOExternalMethodArguments *arguments);
@@ -34,6 +39,12 @@ protected:
     /**
      *  The following static methods redirect the call to the 'target' instance.
      */
+    static IOReturn sMethodOpen(it_unbit_foohid_userclient *target,
+                                  void *reference,
+                                  IOExternalMethodArguments *arguments);
+    static IOReturn sMethodClose(it_unbit_foohid_userclient *target,
+                                  void *reference,
+                                  IOExternalMethodArguments *arguments);
     static IOReturn sMethodCreate(it_unbit_foohid_userclient *target,
                                  void *reference,
                                  IOExternalMethodArguments *arguments);
