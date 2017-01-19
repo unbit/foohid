@@ -52,34 +52,34 @@ int main() {
     io_iterator_t iterator;
     io_service_t service;
     io_connect_t connect;
-    
+
     // Get a reference to the IOService
     kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(SERVICE_NAME), &iterator);
-    
+
     if (ret != KERN_SUCCESS) {
         printf("Unable to access IOService.\n");
         exit(1);
     }
-    
+
     // Iterate till success
     int found = 0;
     while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL) {
         ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
-        
+
         if (ret == KERN_SUCCESS) {
             found = 1;
             break;
         }
-        
+
         IOObjectRelease(service);
     }
     IOObjectRelease(iterator);
-    
+
     if (!found) {
         printf("Unable to open IOService.\n");
         exit(1);
     }
-    
+
     // Fill up the input arguments.
     uint32_t input_count = 8;
     uint64_t input[input_count];
@@ -91,12 +91,12 @@ int main() {
     input[5] = strlen((char *)input[4]);  // serial number len
     input[6] = (uint64_t) 2;  // vendor ID
     input[7] = (uint64_t) 3;  // device ID
-    
+
     ret = IOConnectCallScalarMethod(connect, it_unbit_foohid_method_create, input, input_count, NULL, 0);
     if (ret != KERN_SUCCESS) {
         printf("Unable to create HID device. May be fine if created previously.\n");
     }
-    
+
     // Arguments to be passed through the HID message.
     struct mouse_report_t mouse;
     uint32_t send_count = 4;
@@ -105,17 +105,17 @@ int main() {
     send[1] = strlen((char *)input[0]);  // name length
     send[2] = (uint64_t) &mouse;  // mouse struct
     send[3] = sizeof(struct mouse_report_t);  // mouse struct len
-    
+
     for(;;) {
         mouse.buttons = 0;
         mouse.x = rand();
         mouse.y = rand();
-        
+
         ret = IOConnectCallScalarMethod(connect, it_unbit_foohid_method_send, send, send_count, NULL, 0);
         if (ret != KERN_SUCCESS) {
             printf("Unable to send message to HID device.\n");
         }
-        
+
         sleep(1);  // sleep for a second
     }
 }

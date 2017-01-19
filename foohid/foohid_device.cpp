@@ -7,17 +7,17 @@ OSDefineMetaClassAndStructors(it_unbit_foohid_device, IOHIDDevice)
 
 bool it_unbit_foohid_device::init(OSDictionary *dict) {
     LogD("Initializing a new virtual HID device.");
-    
+
     if (!super::init(dict)) {
         return false;
     }
-    
+
     if (isMouse) {
         setProperty("HIDDefaultBehavior", "Mouse");
     } else if (isKeyboard) {
         setProperty("HIDDefaultBehavior", "Keyboard");
     }
-    
+
     return true;
 }
 
@@ -28,17 +28,17 @@ bool it_unbit_foohid_device::start(IOService *provider) {
 
 void it_unbit_foohid_device::stop(IOService *provider) {
     LogD("Executing 'it_unbit_foohid_device::stop()'.");
-    
+
     super::stop(provider);
 }
 
 void it_unbit_foohid_device::free() {
     LogD("Executing 'it_unbit_foohid_device::free()'.");
-    
+
     if (reportDescriptor) IOFree(reportDescriptor, reportDescriptor_len);
     if (m_name) m_name->release();
     if (m_serial_number_string) m_serial_number_string->release();
-    
+
     super::free();
 }
 
@@ -55,7 +55,7 @@ void it_unbit_foohid_device::setSerialNumberString(OSString *serialNumberString)
     if (serialNumberString) {
         serialNumberString->retain();
     }
-    
+
     m_serial_number_string = serialNumberString;
 }
 
@@ -71,15 +71,15 @@ IOReturn it_unbit_foohid_device::newReportDescriptor(IOMemoryDescriptor **descri
     LogD("Executing 'it_unbit_foohid_device::newReportDescriptor()'.");
     IOBufferMemoryDescriptor *buffer =
         IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, 0, reportDescriptor_len);
-    
+
     if (!buffer) {
         LogD("Error while allocating new IOBufferMemoryDescriptor.");
         return kIOReturnNoResources;
     }
-    
+
     buffer->writeBytes(0, reportDescriptor, reportDescriptor_len);
     *descriptor = buffer;
-    
+
     return kIOReturnSuccess;
 }
 

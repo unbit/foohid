@@ -2,14 +2,14 @@
 
 class it_unbit_foohid : public IOService {
     OSDeclareDefaultStructors(it_unbit_foohid)
-    
+
 public:
     virtual bool init(OSDictionary *dictionary = 0) override;
     virtual void free(void) override;
-    
+
     virtual bool start(IOService *provider) override;
     virtual void stop(IOService *provider) override;
-    
+
     /**
      *  Create a new virtual device.
      *
@@ -28,7 +28,7 @@ public:
                               unsigned char *report_descriptor, UInt16 report_descriptor_len,
                               char *serial_number = nullptr, UInt16 serial_number_len = 0,
                               UInt32 vendor_id = 0, UInt32 product_id = 0);
-    
+
     /**
      *  Destroy a given device.
      *
@@ -38,7 +38,7 @@ public:
      *  @return True on success.
      */
     virtual bool methodDestroy(char *name, UInt8 name_len);
-    
+
     /**
      *  Send a report descriptor to the device.
      *
@@ -52,9 +52,9 @@ public:
     virtual bool methodSend(char *name, UInt8 name_len,
                             unsigned char *report_descriptor,
                             UInt16 report_descriptor_len);
-    
+
     /**
-     *  Return the names of the currently managed virtual devices, 
+     *  Return the names of the currently managed virtual devices,
      *  separated by '\x00'.
      *
      *  @param buf     A buffer in which to store the virtual devices' names.
@@ -66,7 +66,7 @@ public:
      */
     virtual bool methodList(char *buf, UInt16 buf_len,
                             UInt16 *needed, UInt16 *items);
-    
+
 private:
     /**
      *  Keep track of managed/created HID devices.
