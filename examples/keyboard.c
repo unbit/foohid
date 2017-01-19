@@ -93,7 +93,7 @@ int main() {
     io_iterator_t iterator;
     io_service_t service;
     
-    // Get a reference to the IOService
+    // Get a reference to the IOServiceaaaaaaaa
     kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(SERVICE_NAME), &iterator);
     
     if (ret != KERN_SUCCESS) {
@@ -134,7 +134,8 @@ int main() {
     signal(SIGINT, cleanup);
     signal(SIGQUIT, cleanup);
     signal(SIGTERM, cleanup);
-    
+    signal(SIGKILL, cleanup);
+
     // Fill up the input arguments.
     uint32_t input_count = 8;
     uint64_t input[input_count];
@@ -164,20 +165,20 @@ int main() {
     keyboard.modifier = 0;
     
     for(;;) {
-        // Send 'a' key
-        keyboard.key_codes[0] = 0x04;
-        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
-        if (ret != KERN_SUCCESS) {
-            printf("Unable to send message to HID device.\n");
-        }
-        sleep(1); // sleep for a second
-        
-        // Send key-up
-        keyboard.key_codes[0] = 0x00;
-        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
-        if (ret != KERN_SUCCESS) {
-            printf("Unable to send message to HID device.\n");
-        }
-        sleep(10); // sleep for a second
+//        // Send 'a' key
+//        keyboard.key_codes[0] = 0x04;
+//        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
+//        if (ret != KERN_SUCCESS) {
+//            printf("Unable to send message to HID device.\n");
+//        }
+//        sleep(1); // sleep for a second
+//        
+//        // Send key-up
+//        keyboard.key_codes[0] = 0x00;
+//        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
+//        if (ret != KERN_SUCCESS) {
+//            printf("Unable to send message to HID device.\n");
+//        }
+//        sleep(1); // sleep for a second
     }
 }

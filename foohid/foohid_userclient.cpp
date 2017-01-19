@@ -27,13 +27,17 @@ bool it_unbit_foohid_userclient::initWithTask(task_t owningTask, void *securityT
 
 bool it_unbit_foohid_userclient::start(IOService *provider) {
     LogD("Executing 'it_unbit_foohid_userclient::start()'.");
+
+  if (!super::start(provider)) {
+    return false;
+  }
     
     m_hid_provider = OSDynamicCast(it_unbit_foohid, provider);
     if (!m_hid_provider) {
         return false;
     }
     
-    return super::start(provider);
+    return true;
 }
 
 void it_unbit_foohid_userclient::stop(IOService *provider) {
