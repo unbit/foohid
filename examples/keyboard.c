@@ -165,20 +165,20 @@ int main() {
     keyboard.modifier = 0;
 
     for(;;) {
-//        // Send 'a' key
-//        keyboard.key_codes[0] = 0x04;
-//        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
-//        if (ret != KERN_SUCCESS) {
-//            printf("Unable to send message to HID device.\n");
-//        }
-//        sleep(1); // sleep for a second
-//
-//        // Send key-up
-//        keyboard.key_codes[0] = 0x00;
-//        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
-//        if (ret != KERN_SUCCESS) {
-//            printf("Unable to send message to HID device.\n");
-//        }
-//        sleep(1); // sleep for a second
+        // Send 'a' key
+        keyboard.key_codes[0] = 0x04;
+        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
+        if (ret != KERN_SUCCESS) {
+            printf("Unable to send message to HID device.\n");
+        }
+        sleep(1); // sleep for a second
+
+        // Send key-up
+        keyboard.key_codes[0] = 0x00;
+        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
+        if (ret != KERN_SUCCESS) {
+            printf("Unable to send message to HID device.\n");
+        }
+        sleep(1); // sleep for a second
     }
 }
