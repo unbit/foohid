@@ -87,7 +87,7 @@ int main() {
     io_iterator_t iterator;
     io_service_t service;
 
-    // Get a reference to the IOServiceaaaaaaaa
+    // Get a reference to the IOService
     kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(SERVICE_NAME), &iterator);
 
     if (ret != KERN_SUCCESS) {
