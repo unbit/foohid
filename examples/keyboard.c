@@ -8,8 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "foohid_user_kernel_shared.h"
+
 unsigned char report_descriptor[] = {
-     0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
+    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
     0x09, 0x06,                    // USAGE (Keyboard)
     0xa1, 0x01,                    // COLLECTION (Application)
     0x05, 0x07,                    //   USAGE_PAGE (Keyboard)
@@ -56,18 +58,34 @@ struct keyboard_report_t {
     uint8_t reserved_bis;
 };
 
-#define SERVICE_NAME "it_unbit_foohid"
-
-#define FOOHID_CREATE 0  // create selector
-#define FOOHID_SEND 2  // send selector
-
 #define DEVICE_NAME "Foohid Virtual KB"
 #define DEVICE_SN "SN 123456"
+
+io_connect_t foohid_connect;
+
+void cleanup(int sig) {
+    kern_return_t ret;
+
+    // Destroy the keyboard we created
+    uint32_t destroy_count = 2;
+    uint64_t destroy[destroy_count];
+    destroy[0] = (uint64_t) strdup(DEVICE_NAME); // device name
+    destroy[1] = strlen((char *)destroy[0]);       // name length
+
+    ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_destroy, destroy, destroy_count, NULL, NULL);
+    if (ret != KERN_SUCCESS) {
+        printf("Unable to destroy HID device. May be fine if it wasn't created.\n");
+    }
+
+    // Close our connection to the user client.
+    IOServiceClose(foohid_connect);
+
+    exit(0);
+}
 
 int main() {
     io_iterator_t iterator;
     io_service_t service;
-    io_connect_t connect;
 
     // Get a reference to the IOService
     kern_return_t ret = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(SERVICE_NAME), &iterator);
@@ -80,7 +98,7 @@ int main() {
     // Iterate till success
     int found = 0;
     while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL) {
-        ret = IOServiceOpen(service, mach_task_self(), 0, &connect);
+        ret = IOServiceOpen(service, mach_task_self(), 0, &foohid_connect);
 
         if (ret == KERN_SUCCESS) {
             found = 1;
@@ -93,8 +111,16 @@ int main() {
 
     if (!found) {
         printf("Unable to open IOService.\n");
+        cleanup(0);
         exit(1);
     }
+
+    // Register handler for interrupts.
+    signal(SIGHUP, cleanup);
+    signal(SIGINT, cleanup);
+    signal(SIGQUIT, cleanup);
+    signal(SIGTERM, cleanup);
+    signal(SIGKILL, cleanup);
 
     // Fill up the input arguments.
     uint32_t input_count = 8;
@@ -108,7 +134,7 @@ int main() {
     input[6] = (uint64_t) 2;  // vendor ID
     input[7] = (uint64_t) 3;  // device ID
 
-    ret = IOConnectCallScalarMethod(connect, FOOHID_CREATE, input, input_count, NULL, 0);
+    ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_create, input, input_count, NULL, NULL);
     if (ret != KERN_SUCCESS) {
         printf("Unable to create HID device. May be fine if created previously.\n");
     }
@@ -122,21 +148,23 @@ int main() {
     send[2] = (uint64_t) &keyboard;  // keyboard struct
     send[3] = sizeof(struct keyboard_report_t);  // keyboard struct len
 
-    int i = 0;
-    for(i = 0; ; i++) {
-        keyboard.modifier = 0;
+    keyboard.modifier = 0;
 
-        if (i % 2 == 0) {
-            keyboard.key_codes[0] = 0x04;
-        } else {
-            keyboard.key_codes[0] = 0x00;
-        }
-
-        ret = IOConnectCallScalarMethod(connect, FOOHID_SEND, send, send_count, NULL, 0);
+    for(;;) {
+        // Send 'a' key
+        keyboard.key_codes[0] = 0x04;
+        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
         if (ret != KERN_SUCCESS) {
-            printf("Unable to send message to HID device.\n");
+            printf("Unable to send message to HID device: 0x%08x\n", ret);
         }
+        sleep(1); // sleep for a second
 
-        sleep(1);  // sleep for a second
+        // Send key-up
+        keyboard.key_codes[0] = 0x00;
+        ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
+        if (ret != KERN_SUCCESS) {
+            printf("Unable to send message to HID device: 0x%08x\n", ret);
+        }
+        sleep(1); // sleep for a second
     }
 }
