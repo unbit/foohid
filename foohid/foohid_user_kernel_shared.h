@@ -1,8 +1,6 @@
 #define SERVICE_NAME "it_unbit_foohid"
 
 enum {
-    it_unbit_foohid_userclient_open,
-    it_unbit_foohid_userclient_close,
     it_unbit_foohid_method_create,
     it_unbit_foohid_method_destroy,
     it_unbit_foohid_method_send,

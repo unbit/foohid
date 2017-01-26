@@ -77,12 +77,6 @@ void cleanup(int sig) {
         printf("Unable to destroy HID device. May be fine if it wasn't created.\n");
     }
 
-    // Close the user client
-    ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_userclient_close, NULL, 0, NULL, NULL);
-    if (ret != KERN_SUCCESS) {
-        printf("Unable to close user client. May be fine if it was never opened.\n");
-    }
-
     // Close our connection to the user client.
     IOServiceClose(foohid_connect);
 
@@ -117,14 +111,6 @@ int main() {
 
     if (!found) {
         printf("Unable to open IOService.\n");
-        cleanup(0);
-        exit(1);
-    }
-
-    // Open the user client.
-    ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_userclient_open, NULL, 0, NULL, NULL);
-    if (ret != KERN_SUCCESS) {
-        printf("Unable to open user client.\n");
         cleanup(0);
         exit(1);
     }
@@ -169,7 +155,7 @@ int main() {
         keyboard.key_codes[0] = 0x04;
         ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
         if (ret != KERN_SUCCESS) {
-            printf("Unable to send message to HID device.\n");
+            printf("Unable to send message to HID device: 0x%08x\n", ret);
         }
         sleep(1); // sleep for a second
 
@@ -177,7 +163,7 @@ int main() {
         keyboard.key_codes[0] = 0x00;
         ret = IOConnectCallScalarMethod(foohid_connect, it_unbit_foohid_method_send, send, send_count, NULL, NULL);
         if (ret != KERN_SUCCESS) {
-            printf("Unable to send message to HID device.\n");
+            printf("Unable to send message to HID device: 0x%08x\n", ret);
         }
         sleep(1); // sleep for a second
     }

@@ -50,8 +50,6 @@ IOReturn it_unbit_foohid_userclient::clientClose(void)
 {
     LogD("Executing 'it_unbit_foohid_userclient::clientClose()'.");
 
-    (void) methodClose();
-
     bool success = terminate();
     if (!success) {
         LogD("terminate() failed.");
@@ -70,7 +68,6 @@ bool it_unbit_foohid_userclient::didTerminate(IOService* provider, IOOptionBits 
 
     // If all pending I/O has been terminated, close our provider. If I/O is still outstanding, set defer to true
     // and the user client will not have stop called on it.
-    methodClose();
     *defer = false;
 
     return super::didTerminate(provider, options, defer);
@@ -90,8 +87,6 @@ bool it_unbit_foohid_userclient::didTerminate(IOService* provider, IOOptionBits 
  *  };
  */
 const IOExternalMethodDispatch it_unbit_foohid_userclient::s_methods[it_unbit_foohid_method_count] = {
-    {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodOpen, 0, 0, 0, 0},
-    {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodClose, 0, 0, 0, 0},
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodCreate, 8, 0, 0, 0},
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodDestroy, 2, 0, 0, 0},
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodSend, 4, 0, 0, 0},
@@ -113,16 +108,6 @@ IOReturn it_unbit_foohid_userclient::externalMethod(uint32_t selector, IOExterna
     return super::externalMethod(selector, arguments, dispatch, target, reference);
 }
 
-IOReturn it_unbit_foohid_userclient::sMethodOpen(it_unbit_foohid_userclient *target, void *reference,
-                                                   IOExternalMethodArguments *arguments) {
-    return target->methodOpen();
-}
-
-IOReturn it_unbit_foohid_userclient::sMethodClose(it_unbit_foohid_userclient *target, void *reference,
-                                                   IOExternalMethodArguments *arguments) {
-    return target->methodClose();
-}
-
 IOReturn it_unbit_foohid_userclient::sMethodCreate(it_unbit_foohid_userclient *target, void *reference,
                                                   IOExternalMethodArguments *arguments) {
     return target->methodCreate(arguments);
@@ -141,35 +126,6 @@ IOReturn it_unbit_foohid_userclient::sMethodSend(it_unbit_foohid_userclient *tar
 IOReturn it_unbit_foohid_userclient::sMethodList(it_unbit_foohid_userclient *target, void *reference,
                                                 IOExternalMethodArguments *arguments) {
     return target->methodList(arguments);
-}
-
-IOReturn it_unbit_foohid_userclient::methodOpen() {
-    if (m_hid_provider == NULL || isInactive()) {
-        LogD("methodOpen->kIOReturnNotAttached");
-        return kIOReturnNotAttached;
-    }
-
-    if (!m_hid_provider->open(this)) {
-        LogD("methodOpen->kIOReturnExclusiveAccess");
-        return kIOReturnExclusiveAccess;
-    }
-
-    LogD("methodOpen->kIOReturnSuccess");
-    return kIOReturnSuccess;
-}
-
-IOReturn it_unbit_foohid_userclient::methodClose() {
-    if (m_hid_provider == NULL) {
-        return kIOReturnNotAttached;
-    }
-
-    if (!m_hid_provider->isOpen(this)) {
-        return kIOReturnNotOpen;
-    }
-
-    m_hid_provider->close(this);
-
-    return kIOReturnSuccess;
 }
 
 IOReturn it_unbit_foohid_userclient::methodCreate(IOExternalMethodArguments *arguments) {
