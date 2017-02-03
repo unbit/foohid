@@ -1,3 +1,6 @@
+#ifndef foohid_h
+#define foohid_h
+
 #include <IOKit/IOService.h>
 
 class it_unbit_foohid : public IOService {
@@ -66,10 +69,23 @@ public:
      */
     virtual bool methodList(char *buf, UInt16 buf_len,
                             UInt16 *needed, UInt16 *items);
-    
+
+    /**
+     *  Subscribe userclient to setReport calls on the given device.
+     *
+     *  @param name       A unique device name.
+     *  @param name_len   Length of 'name'.
+     *  @param userClient UserClient that is subscribing.
+     *
+     *  @return True on success.
+     */
+    virtual bool methodSubscribe(char *name, UInt8 name_len, IOService *userClient);
+
 private:
     /**
      *  Keep track of managed/created HID devices.
      */
     OSDictionary *m_hid_devices;
 };
+
+#endif

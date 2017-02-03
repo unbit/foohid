@@ -1,3 +1,6 @@
+#ifndef foohid_userclient_h
+#define foohid_userclient_h
+
 #include <IOKit/IOService.h>
 #include <IOKit/IOUserClient.h>
 
@@ -11,7 +14,8 @@ enum {
     it_unbit_foohid_method_destroy,
     it_unbit_foohid_method_send,
     it_unbit_foohid_method_list,
-    
+    it_unbit_foohid_method_subscribe,
+
     it_unbit_foohid_method_count  // Keep track of the length of this enum.
 };
 
@@ -29,7 +33,9 @@ public:
                                     IOExternalMethodArguments *arguments,
                                     IOExternalMethodDispatch *dispatch,
                                     OSObject *target, void *reference) override;
-    
+
+    virtual IOReturn notifySubscriber(IOMemoryDescriptor *report);
+
 protected:
     /**
      * The following methods unpack/handle the given arguments and 
@@ -39,7 +45,8 @@ protected:
     virtual IOReturn methodDestroy(IOExternalMethodArguments *arguments);
     virtual IOReturn methodSend(IOExternalMethodArguments *arguments);
     virtual IOReturn methodList(IOExternalMethodArguments *arguments);
-    
+    virtual IOReturn methodSubscribe(IOExternalMethodArguments *arguments);
+
     /**
      *  The following static methods redirect the call to the 'target' instance.
      */
@@ -55,7 +62,10 @@ protected:
     static IOReturn sMethodList(it_unbit_foohid_userclient *target,
                                void *reference,
                                IOExternalMethodArguments *arguments);
-    
+    static IOReturn sMethodSubscribe(it_unbit_foohid_userclient *target,
+                                    void *reference,
+                                    IOExternalMethodArguments *arguments);
+
 private:
     /**
      *  Method dispatch table.
@@ -66,9 +76,16 @@ private:
      *  Driver provider.
      */
     it_unbit_foohid *m_hid_provider;
+
+    /**
+     *  Userland subscriber.
+     */
+    OSAsyncReference64 *m_subscriber = nullptr;
     
     /**
      *  Task owner.
      */
     task_t m_owner;
 };
+
+#endif

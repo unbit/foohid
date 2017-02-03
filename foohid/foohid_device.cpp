@@ -46,6 +46,10 @@ OSString *it_unbit_foohid_device::name() {
     return m_name;
 }
 
+void it_unbit_foohid_device::subscribe(IOService *userClient) {
+    m_user_client = OSDynamicCast(it_unbit_foohid_userclient, userClient);
+}
+
 void it_unbit_foohid_device::setName(OSString *name) {
     if (name) name->retain();
     m_name = name;
@@ -81,6 +85,13 @@ IOReturn it_unbit_foohid_device::newReportDescriptor(IOMemoryDescriptor **descri
     *descriptor = buffer;
     
     return kIOReturnSuccess;
+}
+
+IOReturn it_unbit_foohid_device::setReport(IOMemoryDescriptor *report, IOHIDReportType reportType, IOOptionBits options) {
+    // No one is listening yet.
+    if (!m_user_client) return kIOReturnSuccess;
+
+    return m_user_client->notifySubscriber(report);
 }
 
 OSString *it_unbit_foohid_device::newProductString() const {

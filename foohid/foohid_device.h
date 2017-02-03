@@ -1,4 +1,8 @@
+#ifndef foohid_device_h
+#define foohid_device_h
+
 #include "IOKit/hid/IOHIDDevice.h"
+#include "foohid_userclient.h"
 
 class it_unbit_foohid_device : public IOHIDDevice {
     OSDeclareDefaultStructors(it_unbit_foohid_device)
@@ -46,6 +50,13 @@ public:
      *  @return The device name.
      */
     virtual OSString *name();
+
+    /**
+     *  Store a callback to be called whenever setReport is called on device.
+     *
+     *  @param subscriber Reference to callback.
+     */
+    virtual void subscribe(IOService *userClient);
     
     virtual OSString *newProductString() const override;
     virtual OSString *newSerialNumberString() const override;
@@ -53,7 +64,10 @@ public:
     virtual OSNumber *newProductIDNumber() const override;
     
     virtual IOReturn newReportDescriptor(IOMemoryDescriptor **descriptor) const override;
-    
+
+    virtual IOReturn setReport(IOMemoryDescriptor *report, IOHIDReportType reportType,
+                               IOOptionBits options = 0) override;
+
     unsigned char *reportDescriptor = nullptr;
     UInt16 reportDescriptor_len;
     
@@ -64,4 +78,7 @@ private:
     OSString *m_serial_number_string = nullptr;
     OSNumber *m_vendor_id = nullptr;
     OSNumber *m_product_id = nullptr;
+    it_unbit_foohid_userclient *m_user_client = nullptr;
 };
+
+#endif

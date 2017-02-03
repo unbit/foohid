@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		517FF7E71E45107D00DD60EE /* foohid_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = foohid_types.h; sourceTree = "<group>"; };
 		625BDE461AA6EE98001573B2 /* foohid.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = foohid.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		625BDE4A1AA6EE98001573B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		625BDE4B1AA6EE98001573B2 /* foohid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = foohid.h; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				764F7B221BB9AE4F005252AF /* debug.h */,
+				517FF7E71E45107D00DD60EE /* foohid_types.h */,
 				625BDE581AA7034B001573B2 /* foohid_device.cpp */,
 				625BDE591AA7034B001573B2 /* foohid_device.h */,
 				625BDE541AA6F19A001573B2 /* foohid_userclient.cpp */,
