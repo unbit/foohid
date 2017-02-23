@@ -270,3 +270,33 @@ bool it_unbit_foohid::methodList(char *buf, UInt16 buf_len,
     if (*needed != 0) return false;
     return true;
 }
+
+bool it_unbit_foohid::methodSubscribe(char *name, UInt8 name_len, IOService *userClient) {
+    OSString *key = nullptr;
+    it_unbit_foohid_device *device = nullptr;
+
+    if (name_len == 0) return false;
+
+    {
+        char *cname = (char *)IOMalloc(name_len + 1);
+        if (!cname) return false;
+        memcpy(cname, name, name_len);
+        cname[name_len] = 0;
+        key = OSString::withCString(cname);
+        IOFree(cname, name_len + 1);
+    }
+    if (!key) goto end;
+
+    device = (it_unbit_foohid_device *)m_hid_devices->getObject(key);
+    if (!device) goto end;
+
+    device->subscribe(userClient);
+
+    key->release();
+
+    return true;
+
+end:
+    if (key) key->release();
+    return false;
+}

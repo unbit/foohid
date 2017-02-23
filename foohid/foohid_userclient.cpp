@@ -2,6 +2,7 @@
 #include <IOKit/IOKitKeys.h>
 
 #include "foohid_userclient.h"
+#include "foohid_types.h"
 #include "debug.h"
 #include <string.h>
 
@@ -63,6 +64,7 @@ const IOExternalMethodDispatch it_unbit_foohid_userclient::s_methods[it_unbit_fo
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodDestroy, 2, 0, 0, 0},
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodSend, 4, 0, 0, 0},
     {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodList, 2, 0, 2, 0},
+    {(IOExternalMethodAction)&it_unbit_foohid_userclient::sMethodSubscribe, 2, 0, 0, 0},
 };
 
 IOReturn it_unbit_foohid_userclient::externalMethod(uint32_t selector, IOExternalMethodArguments *arguments,
@@ -98,6 +100,11 @@ IOReturn it_unbit_foohid_userclient::sMethodSend(it_unbit_foohid_userclient *tar
 IOReturn it_unbit_foohid_userclient::sMethodList(it_unbit_foohid_userclient *target, void *reference,
                                                 IOExternalMethodArguments *arguments) {
     return target->methodList(arguments);
+}
+
+IOReturn it_unbit_foohid_userclient::sMethodSubscribe(it_unbit_foohid_userclient *target, void *reference,
+                                                 IOExternalMethodArguments *arguments) {
+    return target->methodSubscribe(arguments);
 }
 
 IOReturn it_unbit_foohid_userclient::methodCreate(IOExternalMethodArguments *arguments) {
@@ -351,4 +358,80 @@ nomem:
     if (map) map->release();
     if (user_buf) user_buf->release();
     return kIOReturnNoMemory;
+}
+
+IOReturn it_unbit_foohid_userclient::methodSubscribe(IOExternalMethodArguments *arguments) {
+    IOMemoryDescriptor *user_buf = nullptr;
+    bool user_buf_complete = false;
+
+    IOMemoryMap *map = nullptr;
+
+    char *ptr = nullptr;
+
+    bool ret = false;
+
+    UInt8 *name_ptr = (UInt8 *)arguments->scalarInput[0];
+    UInt8 name_len = (UInt8)arguments->scalarInput[1];
+
+    if (!arguments->asyncReference) return kIOReturnBadArgument;
+
+    user_buf = IOMemoryDescriptor::withAddressRange((vm_address_t)name_ptr, name_len,
+                                                    kIODirectionOut, m_owner);
+    if (!user_buf) goto nomem;
+    if (user_buf->prepare() != kIOReturnSuccess) goto nomem;
+    user_buf_complete = true;
+
+    map = user_buf->map();
+    if (!map) goto nomem;
+
+    ptr = (char *)map->getAddress();
+    if (!ptr) goto nomem;
+
+    if (m_subscriber) IOFree(m_subscriber, sizeof(OSAsyncReference64));
+    m_subscriber = (OSAsyncReference64 *)IOMalloc(sizeof(OSAsyncReference64));
+    if (!m_subscriber) goto nomem;
+    memcpy(m_subscriber, arguments->asyncReference, sizeof(OSAsyncReference64));
+
+    ret = m_hid_provider->methodSubscribe(ptr, name_len, this);
+
+    user_buf->complete();
+    map->release();
+    user_buf->release();
+
+    if (ret) {
+        return kIOReturnSuccess;
+    }
+
+    return kIOReturnDeviceError;
+
+nomem:
+    if (map) map->release();
+    if (user_buf_complete) user_buf->complete();
+    if (user_buf) user_buf->release();
+    return kIOReturnNoMemory;
+}
+
+IOReturn it_unbit_foohid_userclient::notifySubscriber(IOMemoryDescriptor *report) {
+    IOMemoryMap *reportMap;
+    foohid_report userReport;
+    io_user_reference_t *args = (io_user_reference_t *)&userReport;
+    uint32_t numArgs = sizeof(foohid_report) / sizeof(io_user_reference_t);
+
+    // Max HID report size is 64 bytes. This shouldn't happen.
+    if (report->getLength() > foohid_max_report) return kIOReturnBadArgument;
+
+    report->prepare();
+    reportMap = report->map();
+
+    userReport.size = reportMap->getSize();
+    memcpy(userReport.data, (void *)reportMap->getAddress(), userReport.size);
+    sendAsyncResult64(*m_subscriber, kIOReturnSuccess, args, numArgs);
+
+    report->complete();
+    reportMap->release();
+
+    // Sleep for a bit to not freak out clients.
+    IOSleep(1); // 1ms
+
+    return kIOReturnSuccess;
 }
