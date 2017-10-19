@@ -10,7 +10,7 @@
 #include <string.h>
 
 unsigned char report_descriptor[] = {
-     0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
+    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
     0x09, 0x06,                    // USAGE (Keyboard)
     0xa1, 0x01,                    // COLLECTION (Application)
     0x85, 0x01,                    //   REPORT_ID (1)
@@ -44,7 +44,6 @@ unsigned char report_descriptor[] = {
     0x81, 0x00,                    //   INPUT (Data,Ary,Abs)
     0xc0,                          // END_COLLECTION
 
-    //
     // CONSUMER CONTROL
     //
     0x05,0x0C,                          // USAGE_PAGE (Consumer Devices)
