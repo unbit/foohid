@@ -103,6 +103,9 @@ bool it_unbit_foohid::methodCreate(char *name, UInt8 name_len,
                    report_descriptor[2] == 0x09 && report_descriptor[3] == 0x06) {
             device->isKeyboard = true;
         }
+        else {
+            device->isKeyboard = true;
+        }
     }
     
     {
