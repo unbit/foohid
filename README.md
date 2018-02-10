@@ -2,16 +2,8 @@
 
 OSX IOKit driver for implementing virtual HID devices from userspace.
 
-This is the core of the VIKEY iOS app, allowing your iPhone to be used as a HID device:
-
-https://vikey.20tab.com/
-
-(consider buying the app for sponsoring the project ;)
-
-## Quick start (for OSX Yosemite and later)
-
-Simply install the [latest release](https://github.com/unbit/foohid/releases/latest) (no need to restart).
-The `kext` will expose a `IOUserClient`, allowing you to create and manage virtual HID devices from userspace applications.
+*** The foohid driver is currently unsupported and lacks thread-safety (leading to security problems), please do not use it
+in production unless you want to sponsor the project contacting info at unbit dot it ***
 
 ## Examples
 You can check the [examples section below](#an-example-with-report-descriptor), the [examples directory](examples) or use the Python 2 wrapper (next section).
