@@ -2,7 +2,7 @@
 
 OSX IOKit driver for implementing virtual HID devices from userspace.
 
-*** The foohid driver is currently unsupported and lacks thread-safety (leading to security problems), please do not use it
+*** The foohid driver is currently unsupported and lacks proper thread-safety (leading to security problems), please do not use it
 in production unless you want to sponsor the project contacting info at unbit dot it ***
 
 ## Examples
