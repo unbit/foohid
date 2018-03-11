@@ -28,7 +28,8 @@ public:
     
     virtual bool start(IOService *provider) override;
     virtual void stop(IOService *provider) override;
-    
+    virtual IOReturn clientClose(void) override;
+
     virtual IOReturn externalMethod(uint32_t selector,
                                     IOExternalMethodArguments *arguments,
                                     IOExternalMethodDispatch *dispatch,

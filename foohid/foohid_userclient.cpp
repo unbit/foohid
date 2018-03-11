@@ -46,6 +46,17 @@ void it_unbit_foohid_userclient::stop(IOService *provider) {
     super::stop(provider);
 }
 
+IOReturn it_unbit_foohid_userclient::clientClose(void)
+{
+    bool success = terminate();
+    if (!success) {
+        return kIOReturnDeviceError;
+    }
+
+    return kIOReturnSuccess;
+}
+
+
 /**
  * A dispatch table for this User Client interface, used by 'it_unbit_foohid_userclient::externalMethod()'.
  * The fields of the IOExternalMethodDispatch type follows:
